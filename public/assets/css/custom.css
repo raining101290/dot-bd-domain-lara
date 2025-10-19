@@ -1,0 +1,64 @@
+.bg-half-160{
+    padding: 160px 0;
+    background-size: cover !important;
+    -ms-flex-item-align: center;
+    align-self: center;
+    position: relative !important;
+    background-position: center center;
+}
+
+#topnav .logo img{
+    max-height: 44px;
+}
+
+@media screen and (max-width: 600px) {
+    .buy-button .btn{
+        padding: 7px 16px;
+        font-size: 10px;
+    }
+}
+.my-30{
+    margin-top: 30px !important;
+    margin-bottom: 30px !important;
+}
+.mb-30{
+   margin-bottom: 30px !important;
+}
+.p-30{
+    padding: 30px !important;
+}
+.nav-link.rounded{
+    background-color: #efefef;
+    /* border-radius: 0px !important; */
+}
+.nav.nav-pills .nav-item:first-child .nav-link.rounded{
+    border-top-right-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+}
+.nav.nav-pills .nav-item:last-child .nav-link.rounded{
+    border-top-left-radius: 0px !important;
+    border-bottom-left-radius: 0px !important;
+}
+input::placeholder {
+  color: #CCCCCC;
+}
+.text-xs{
+    font-size: 10px;
+}
+.handlee {
+    font-family: "Handlee", cursive;
+    font-weight: 700;
+    font-style: normal;
+}
+.logo{
+    padding-bottom: 0px;
+    line-height: 74px;
+    position: relative;
+}
+.logo h3{
+    display: inline-block;
+}
+#topnav .buy-button{
+    margin-left: 0px;
+    padding-left: 0px;
+}

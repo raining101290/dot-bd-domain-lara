@@ -1,0 +1,56 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\DomainExtension;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
+class DomainController extends Controller
+{
+    public function show($tld)
+    {
+        $domain = DomainExtension::where('name', '.' . $tld)->firstOrFail();
+        return view('domains.show', compact('domain'));
+    }
+
+    public function search(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string',
+            'extension' => 'required|string',
+        ]);
+
+        $domainName = strtolower($request->name . $request->extension);
+
+        // Mock check for now
+        $isAvailable = $this->checkDomainAvailability($domainName);
+
+        return redirect()->route('domain.result', [
+            'domain' => $domainName,
+            'available' => $isAvailable ? 1 : 0,
+        ]);
+    }
+
+    private function checkDomainAvailability($domain)
+    {
+        return true;
+    }
+    public function result(Request $request)
+    {
+        $domain = $request->query('domain');
+        $available = $request->query('available') == 1;
+
+        return view('domains.result', compact('domain', 'available'));
+    }
+    public function buy($domain)
+    {
+        if (Auth::check()) {
+            // If logged in → go to payment page
+            return redirect()->route('payment.show', ['domain' => $domain]);
+        }
+
+        // If not logged in → go to registration
+        return redirect()->route('register')->with('info', 'Please register to continue buying your domain.');
+    }
+}
