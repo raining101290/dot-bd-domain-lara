@@ -35,7 +35,7 @@
             <nav id="sidebar" class="sidebar-wrapper sidebar-light">
                 <div class="sidebar-content" data-simplebar style="height: calc(100% - 60px);">
                     <div class="sidebar-brand">
-                        <a href="index.php">
+                        <a href="/">
                             <img src="/backend/assets/images/logo.png" width="60%" class="logo-light-mode" alt="">
                             <img src="/backend/assets/images/logo.png" width="60%" class="logo-dark-mode" alt="">
                             <span class="sidebar-colored">

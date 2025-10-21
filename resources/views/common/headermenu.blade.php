@@ -46,7 +46,7 @@
         </ul>
         <div id="navigation">
             <ul class="navigation-menu nav-light">
-                <li><a href="index.php" class="sub-menu-item">Home</a></li>
+                <li><a href="/" class="sub-menu-item">Home</a></li>
                 <li class="has-submenu parent-menu-item">
                     <a href="javascript:void(0)">Buy Domain</a><span class="menu-arrow"></span>
                     <ul class="submenu">

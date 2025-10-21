@@ -1,7 +1,7 @@
 <header id="topnav" class="defaultscroll sticky nav-sticky">
     <div class="container">
         
-        <a class="logo handlee text-success" href="index.php">
+        <a class="logo handlee text-success" href="/">
             <i data-feather="globe" class="fea icon-md mb-1"></i> DomainDesk
             <!-- <span class="logo-light-mode">
                 <img src="assets/images/logo.png" class="l-dark" alt="">
@@ -37,7 +37,7 @@
         </ul>
         <div id="navigation">
             <ul class="navigation-menu nav-light">
-                <li><a href="index.php" class="sub-menu-item">Home</a></li>
+                <li><a href="/" class="sub-menu-item">Home</a></li>
                 <li class="has-submenu parent-menu-item">
                     <a href="javascript:void(0)">Buy Domain</a><span class="menu-arrow"></span>
                     <ul class="submenu">
