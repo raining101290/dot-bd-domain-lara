@@ -18,7 +18,6 @@
         
         <ul class="buy-button list-inline mb-0">
             @auth
-                <!-- This will show only if the user is logged in -->
                 <li class="list-inline-item mb-0">
                     <a href="{{ route('dashboard') }}">
                         <div class="btn btn-primary btn-sm"> Dashboard </div>
@@ -32,21 +31,9 @@
                 </a>
             </li>
             @endguest
-            {{-- <li class="list-inline-item mb-0">
-                <a href="/login">
-                    <div class="btn btn-primary btn-sm"> Login </div>
-                </a>
-            </li>
-
-            <li class="list-inline-item ps-1 mb-0">
-                <a href="/register">
-                    <div class="btn btn-light btn-sm"> Sign Up </div>
-                </a>
-            </li> --}}
         </ul>
         <div id="navigation">
             <ul class="navigation-menu nav-light">
-                <li><a href="/" class="sub-menu-item">Home</a></li>
                 <li class="has-submenu parent-menu-item">
                     <a href="javascript:void(0)">Buy Domain</a><span class="menu-arrow"></span>
                     <ul class="submenu">
@@ -59,7 +46,7 @@
                         @endforeach
                     </ul>
                 </li>
-                <li><a href="pricing.php" class="sub-menu-item">Pricing</a></li>
+                <li><a href="" class="sub-menu-item">Contact</a></li>
             </ul>
         </div>
     </div>

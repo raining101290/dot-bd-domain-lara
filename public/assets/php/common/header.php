@@ -3,11 +3,6 @@
         
         <a class="logo handlee text-success" href="/">
             <i data-feather="globe" class="fea icon-md mb-1"></i> DomainDesk
-            <!-- <span class="logo-light-mode">
-                <img src="assets/images/logo.png" class="l-dark" alt="">
-                <img src="assets/images/logo.png" class="l-light" alt="">
-            </span> -->
-            <!-- <img src="assets/images/logo.png" class="logo-dark-mode" alt=""> -->
         </a>
 
         <div class="menu-extras">
@@ -46,7 +41,7 @@
                         <?php endforeach; ?>
                     </ul>
                 </li>
-                <li><a href="pricing.php" class="sub-menu-item">Pricing</a></li>
+                <li><a href="" class="sub-menu-item">Contact</a></li>
             </ul>
         </div>
     </div>

@@ -40,7 +40,7 @@
                             <h5 class="footer-head">Address</h5>
                             <div class="row">
                                 <div class="col-lg-12">
-                                    <p><b>EyHost Ltd.</b></p>
+                                    <p><b>Domain Desk BD.</b></p>
                                     <p>House# 27/1/B, Road# 3, Shyamoli, Dhaka-1207 , Bangladesh.</p>
                                     <p><i data-feather="globe" class="fea icon-sm mb-1"></i> info@domaindesk.com.bd</p>
                                     <p><i data-feather="phone" class="fea icon-sm mb-1"></i> +88 09614 101010</p>
@@ -60,7 +60,7 @@
             <div class="row align-items-center">
                 <div class="col-sm-6">
                     <div class="text-sm-start">
-                        <p class="mb-0">© <script>document.write(new Date().getFullYear())</script> EyHost Ltd.</p>
+                        <p class="mb-0">© <script>document.write(new Date().getFullYear())</script> Domain Desk BD.</p>
                     </div>
                 </div>
 

@@ -5,14 +5,21 @@ namespace App\Http\Controllers;
 use App\Models\DomainExtension;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Http;
+
 class DomainController extends Controller
 {
     public function show($tld)
     {
+        // $extensions = DomainExtension::pluck('name')->toArray();
+        // $pricingList = getDomainPricing();
+        // $matchedDomains = array_filter($pricingList, function ($item) use ($extensions) {
+        //     return in_array($item->domain, $extensions);
+        // });
+        // $matchedDomains = array_values($matchedDomains);
         $domain = DomainExtension::where('name', '.' . $tld)->firstOrFail();
         return view('domains.show', compact('domain'));
     }
+
 
     public function search(Request $request)
     {
