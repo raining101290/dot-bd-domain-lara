@@ -23,7 +23,6 @@
                                                 <option value="{{ $domain->name }}">{{ $domain->name }}</option>
                                             @endforeach
                                         </select>
-
                                     </div>
                                     <input type="submit" class="searchbtn btn-lg btn btn-primary" value="Search">
                                 </div>
@@ -31,29 +30,16 @@
                         </div>
 
                         <div class="row  justify-content-center">
-                            <div class="col-lg-2 col-md-4 col-6 mt-2">
-                                <a href="javascript:void(0)" class="text-dark">
-                                    <div class="rounded shadow p-1 text-center bg-info text-white">
-                                        <h6 class="mb-0">.bd <br><span>$4.99</span>/year</h6>
-                                    </div>
-                                </a>
-                            </div>
-                            
-                            <div class="col-lg-2 col-md-4 col-6 mt-2">
-                                <a href="javascript:void(0)" class="text-dark">
-                                    <div class="rounded shadow p-1 text-center bg-warning text-white">
-                                        <h6 class="mb-0">.com.bd <br><span>$5.99</span>/year</h6>
-                                    </div>
-                                </a>
-                            </div>
-                            
-                            <div class="col-lg-2 col-md-4 col-6 mt-2">
-                                <a href="javascript:void(0)" class="text-dark">
-                                    <div class="rounded shadow p-1 text-center bg-success text-white">
-                                        <h6 class="mb-0">.বাংলা <br><span>$6.99</span>/year</h6>
-                                    </div>
-                                </a>
-                            </div>
+                            @foreach ($domains as $domain)
+                                <div class="col-lg-2 col-md-4 col-6 mt-2">
+                                    <a href="javascript:void(0)" class="text-dark">
+                                        <div class="rounded shadow p-1 text-center">
+                                            <h6 class="mb-0 ">{{$domain->name}}<br>
+                                                <span class="text-primary">{{number_format($domain->price, 0)}}</span><span class="text-muted">/year</span></h6>
+                                        </div>
+                                    </a>
+                                </div>
+                            @endforeach
                         </div>
                     </form>
                 </div>
@@ -70,19 +56,18 @@
     </div>
 
     <section class="py-5 mt-100">
-        <div class="container">
+        <div class="container bg-light py-5">
             <div class="text-center mb-5">
-                <h2 class="fw-bold">Price to Register a .BD Domain Name</h2>
+                <h2 class="fw-bold">Price to Register a Second level Domain Names</h2>
                 <p class="text-muted">Transparent pricing with fast and reliable registration support.</p>
             </div>
 
-            <div class="row justify-content-center">
+            <div class="row justify-content-center mb-10">
                 <div class="col-md-5 mb-4">
                     <div class="card shadow-lg border-0 h-100">
                         <div class="card-body text-center">
-                            <h5 class="card-title fw-bold">Registration Cost (2 Years)</h5>
-                            <p class="display-6 fw-bold text-success mb-1">৳3,000 </p>
-                            <p class="text-muted">$27.95</p>
+                            <h5 class="card-title fw-bold">Registration Cost (1 Year)</h5>
+                            <p class="display-6 fw-bold text-success mb-1">৳2,000 </p>
                         </div>
                     </div>
                 </div>
@@ -91,13 +76,39 @@
                     <div class="card shadow-lg border-0 h-100">
                         <div class="card-body text-center">
                             <h5 class="card-title fw-bold">Renewal Cost (1 Year)</h5>
-                            <p class="display-6 fw-bold text-primary mb-1">৳1,350</p>
-                            <p class="text-muted">$12.95</p>
+                            <p class="display-6 fw-bold text-primary mb-1">৳2,000</p>
                         </div>
                     </div>
                 </div>
             </div>
 
+
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">Price to Register a Third level Domain Name</h2>
+                <p class="text-muted">Transparent pricing with fast and reliable registration support.</p>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-5 mb-4">
+                    <div class="card shadow-lg border-0 h-100">
+                        <div class="card-body text-center">
+                            <h5 class="card-title fw-bold">Registration Cost (1 Year)</h5>
+                            <p class="display-6 fw-bold text-success mb-1">৳1,100 </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-5 mb-4">
+                    <div class="card shadow-lg border-0 h-100">
+                        <div class="card-body text-center">
+                            <h5 class="card-title fw-bold">Renewal Cost (1 Year)</h5>
+                            <p class="display-6 fw-bold text-primary mb-1">৳1,100</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
             <!-- Extra Info -->
             <div class="mt-5 text-center">
                 <div class="alert alert-info shadow-sm p-30" role="alert">

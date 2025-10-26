@@ -65,3 +65,19 @@ input::placeholder {
 .btn-group-sm>.btn, .btn.btn-sm{
     font-size: 12px;
 }
+
+.mb-6 {
+  margin-bottom: 3.5rem !important;
+}
+.mb-7 {
+  margin-bottom: 4rem !important;
+}
+.mb-8 {
+  margin-bottom: 4.5rem !important;
+}
+.mb-9 {
+  margin-bottom: 6rem !important;
+}
+.mb-10 {
+  margin-bottom: 6.5rem !important;
+}

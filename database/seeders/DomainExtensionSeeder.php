@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\DomainExtension;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DomainExtensionSeeder extends Seeder
@@ -14,20 +13,23 @@ class DomainExtensionSeeder extends Seeder
     public function run(): void
     {
         $tlds = [
-            '.com.bd',
-            '.edu.bd',
-            '.gov.bd',
-            '.net.bd',
-            '.org.bd',
-            '.ac.bd',
-            '.mil.bd',
-            '.info.bd',
-            '.bd',
-            '.বাংলা',
+            ['name' => '.bd',        'price' => 2000.00, 'currency' => 'BDT'],
+            ['name' => '.বাংলা',     'price' => 2000.00, 'currency' => 'BDT'],
+            ['name' => '.com.bd',    'price' => 1100.00,  'currency' => 'BDT'],
+            ['name' => '.net.bd',    'price' => 1100.00,  'currency' => 'BDT'],
+            ['name' => '.info.bd',   'price' => 1100.00,  'currency' => 'BDT'], 
+            ['name' => '.gov.bd',    'price' => 1100.00,    'currency' => 'BDT'],
+            ['name' => '.org.bd',    'price' => 1100.00,  'currency' => 'BDT'],
+            ['name' => '.ac.bd',     'price' => 1100.00,  'currency' => 'BDT'],
+            ['name' => '.edu.bd',    'price' => 1100.00,    'currency' => 'BDT'],
+            ['name' => '.mil.bd',    'price' => 1100.00,    'currency' => 'BDT'],
         ];
 
         foreach ($tlds as $tld) {
-            DomainExtension::create(['name' => $tld]);
+            DomainExtension::updateOrCreate(
+                ['name' => $tld['name']],
+                ['price' => $tld['price'], 'currency' => $tld['currency']]
+            );
         }
     }
 }

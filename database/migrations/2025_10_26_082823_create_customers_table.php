@@ -11,21 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('domain_extensions', function (Blueprint $table) {
+        Schema::create('customers', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
-            $table->decimal('price', 10, 2)->default(0.00); 
-            $table->string('currency', 10)->default('BDT');
             $table->timestamps();
         });
     }
-
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('domain_extensions');
+        Schema::dropIfExists('customers');
     }
 };
