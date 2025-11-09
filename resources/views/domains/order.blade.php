@@ -4,7 +4,7 @@
         <section class="py-50 d-table w-100">
             <div class="container">
                 <div class="row justify-content-center">
-                    <div class="col-12">
+                    <div class="col-12 col-md-8">
                         <div class="text-center mb-5 mt-5">
                             <div class="section-title mb-4 pb-2">
                                 <h1 class="title mb-4 text-light"> Search Your Domain</h1>

@@ -247,3 +247,16 @@ hr {
   background: #efefef !important;
   border-color: #6c757d;
 }
+
+@media (max-width: 505px) {
+    .searchbtn {
+        width: 100% !important;
+        border-top-left-radius: 6px !important;
+        border-bottom-left-radius: 6px !important;
+        margin: 10px 2px 0px 0px !important;
+        padding: 10px 20px !important;
+    }
+    .domain-search-container{
+        padding: 5px;
+    }
+}
