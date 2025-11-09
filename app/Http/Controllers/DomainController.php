@@ -52,12 +52,17 @@ class DomainController extends Controller
     }
     public function buy($domain)
     {
-        if (Auth::check()) {
-            // If logged in → go to payment page
+        if (Auth::guard('customer')->check()) {
+            // Customer is logged in → go to payment page
             return redirect()->route('payment.show', ['domain' => $domain]);
         }
 
         // If not logged in → go to registration
-        return redirect()->route('register')->with('info', 'Please register to continue buying your domain.');
+        return redirect()->route('customer.register')->with('info', 'Please register to continue buying your domain.');
+    }
+    public function order(Request $request)
+    {
+        $domain = $request->query('query');
+        return view('domains.order');
     }
 }

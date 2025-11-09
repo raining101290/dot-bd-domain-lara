@@ -5839,13 +5839,13 @@ html[dir=rtl] .tns-visually-hidden {
   background: linear-gradient(to left, rgb(59, 130, 246) 0%, rgb(37, 99, 235) 100%);
 }
 .bg-gradient-success2 {
-  background: linear-gradient(to left, rgb(56, 189, 248) 0%, rgb(37, 99, 235) 100%);
+  background: linear-gradient(to left, rgb(56, 189, 248) 30%, rgb(37, 99, 235) 100%);
 }
 .bg-gradient-success3 {
-  background: linear-gradient(to left, rgb(99, 102, 241) 0%, rgb(37, 99, 235) 100%);
+  background: linear-gradient(to left, rgb(99, 102, 241) 30%, rgb(37, 99, 235) 70%);
 }
 .bg-gradient-success4 {
-  background: linear-gradient(to left, rgb(16, 185, 129) 0%, rgb(37, 99, 235) 100%);
+  background: linear-gradient(to left, rgb(16, 185, 129) 30%, rgb(37, 99, 235) 100%);
 }
 
 .bg-gradient-primary {

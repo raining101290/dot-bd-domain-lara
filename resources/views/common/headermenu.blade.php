@@ -26,8 +26,13 @@
             @endauth
             @guest
             <li class="list-inline-item mb-0">
-                <a href="/login">
-                    <div class="btn btn-primary btn-sm"> Login </div>
+                <a href="/customer/login">
+                    <div class="btn btn-secondary btn-sm"> Login </div>
+                </a>
+            </li>
+            <li class="list-inline-item mb-0">
+                <a href="/customer/register">
+                    <div class="btn btn-success btn-sm"> Register </div>
                 </a>
             </li>
             @endguest

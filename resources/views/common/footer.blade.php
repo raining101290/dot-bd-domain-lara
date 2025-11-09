@@ -82,7 +82,6 @@
 <a href="#" onclick="topFunction()" id="back-to-top" class="back-to-top fs-5"><i data-feather="arrow-up" class="fea icon-sm icons align-middle"></i></a>
 <!-- Back to top -->
 <!-- JAVASCRIPT -->
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="/assets/libs/feather-icons/feather.min.js"></script>
 <script src="/assets/js/plugins.init.js"></script>

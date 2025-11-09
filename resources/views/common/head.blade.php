@@ -33,4 +33,5 @@
     <!-- Style Css-->
     <link href="{{ asset('assets/css/style.css') }}" id="color-opt" rel="stylesheet" type="text/css">
     <link href="{{ asset('assets/css/custom.css') }}" id="color-opt" rel="stylesheet" type="text/css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
