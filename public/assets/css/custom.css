@@ -130,10 +130,10 @@ hr {
 }
 
 .domain-search.form-control:focus {
-    border: none; 
+    /* border: transparent;  */
     /* rgb(151, 170, 233.5); */
-    -webkit-box-shadow: 0 0 0 .25rem rgba(47, 85, 212, .25);
-    box-shadow: 0 0 0 .25rem rgba(47, 85, 212, .25);
+    /* -webkit-box-shadow: 0 0 0 .25rem rgba(47, 85, 212, .25);
+    box-shadow: 0 0 0 .25rem rgba(47, 85, 212, .25); */
 }
 .domain-search-container{
     border-color: rgb(151, 170, 233.5);
@@ -259,4 +259,17 @@ hr {
     .domain-search-container{
         padding: 5px;
     }
+}
+
+.nav-pills{
+    border: 1px solid #9ec5fe;
+    /* padding: 5px; */
+}
+.nav-pills .nav-link.active {
+    background: #cfe2ff;
+    color: #222222 !important;
+}
+.form-control::placeholder {
+    color: #888888;
+    opacity: 1;
 }

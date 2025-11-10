@@ -22,3 +22,40 @@
     align-items: center;
     font-size: 24px;
 }
+.page-wrapper .sidebar-wrapper .sidebar-brand>a {
+    text-transform: none;
+}
+
+.features .icon {
+    width: 40px;
+    height: 40px;
+}
+
+.quick-btn {
+    border: 1px solid #dee2e6;
+    background: #fff;
+    transition: 0.2s;
+}
+.quick-btn:hover {
+    background: rgba(0,123,255,0.05);
+}
+.quick-btn svg {
+    width: 20px;
+    height: 20px;
+    transition: 0.2s;
+}
+.nav-pills{
+    border: 1px solid #9ec5fe;
+    /* padding: 5px; */
+}
+.nav-pills .nav-link.active {
+    background: #cfe2ff;
+    color: #222222 !important;
+}
+hr {
+    color: #aaa;
+}
+.form-control::placeholder {
+    color: #888888;
+    opacity: 1;
+}

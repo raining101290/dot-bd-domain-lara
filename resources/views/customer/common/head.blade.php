@@ -1,12 +1,12 @@
 <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
     <title>{{ config('app.name', 'Laravel') }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Get your .BD domain registered in Bangladesh with Domain Desk. Choose your ideal .BD domain and launch your website effortlessly.">
     <meta name="keywords" content=".BD domain, .BD domain registration, register .BD domain, Bangladesh domain, buy .BD domain, .BD domain name, .BD website, .BD domain online, .BD domain registration Bangladesh, .BD web address">
     <meta name="author" content="Domain Desk">
     <meta name="email" content="support@domaindsk.com.bd">
-    <meta name="website" content="https://domaindsk.com.bd">
+    <meta name="website" content="domaindsk.com.bd">
 
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content=".com.bd Domain Registration | Affordable Price & Easy Setup" />
@@ -25,13 +25,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Handlee&display=swap" rel="stylesheet">
-    <!-- Bootstrap Css -->
-    <link href="{{ asset('assets/css/bootstrap.min.css') }}" id="bootstrap-style" class="theme-opt" rel="stylesheet" type="text/css">
-    <!-- Icons Css -->
-    <link href="{{ asset('assets/libs/@mdi/font/css/materialdesignicons.min.css') }}" rel="stylesheet" type="text/css">
-    <link href="{{ asset('assets/libs/@iconscout/unicons/css/line.css') }}" type="text/css" rel="stylesheet">
-    <!-- Style Css-->
-    <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet" type="text/css">
-    <link href="{{ asset('assets/css/custom.css') }}" rel="stylesheet" type="text/css">
+
+    <link rel="shortcut icon" href="backend/assets/images/favicon.ico" />
+    <link href="/backend/assets/libs/simplebar/simplebar.min.css" rel="stylesheet">
+    <link href="/backend/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="/backend/assets/libs/@mdi/font/css/materialdesignicons.min.css" rel="stylesheet" type="text/css">
+    <link href="/backend/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="/backend/assets/libs/@iconscout/unicons/css/line.css" type="text/css" rel="stylesheet" />
+    <link href="/backend/assets/css/style.min.css" rel="stylesheet" type="text/css" />
+    <link href="/backend/assets/css/custom.css" rel="stylesheet" type="text/css" />
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>

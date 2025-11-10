@@ -4,12 +4,14 @@
         <section class="py-50 d-table w-100">
             <div class="container">
                 <div class="row justify-content-center">
-                    <div class="col-12 col-md-8">
-                        <div class="text-center mb-5 mt-5">
-                            <div class="section-title mb-4 pb-2">
-                                <h1 class="title mb-4 text-light"> Search Your Domain</h1>
-                            </div>
+                    <div class="col-12 text-center">
+                        <div class="section-title mb-4 pb-2">
+                            <span class="badge rounded-pill bg-soft-success"><i class="uil uil-globe text-success"></i> Secure Your Online Identity</span>
+                            <h4 class="title text-success mt-3 mb-4">Search Your Domain</h4>
+                            <p class="text-white-50 para-desc mb-0 mx-auto">Get your perfect domain name from <span class="text-success fw-bold">Domaindesk</span> in minutes. Secure, fast, and compliant with BTCL & BTRC regulations. </p>
                         </div>
+                    </div>
+                    <div class="col-12 col-md-8">  
                         <form id="domainSearchForm" class="card shadow rounded mt-60">
                             @csrf
                             <div class="row">
@@ -37,20 +39,6 @@
 
                                         <button type="submit" class="searchbtn btn-lg btn btn-primary">Search</button>
                                     </div>
-                                    {{-- <div class="input-group domain-search-container">
-                                        <input name="name" id="name" type="text"
-                                            class="form-control form-control-lg rounded-left" placeholder="Domain name"
-                                            required>
-                                        <div class="input-group-append">
-                                            <select class="form-control form-control-lg rounded-0" name="extension"
-                                                id="extension">
-                                                @foreach ($domains as $domain)
-                                                    <option value="{{ $domain->name }}">{{ $domain->name }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <button type="submit" class="searchbtn btn-lg btn btn-primary">Search</button>
-                                    </div> --}}
                                 </div>
                             </div>
                         </form>
@@ -86,15 +74,15 @@
                                 <div class="card-body">
                                     <div class="row mb-20">
                                         <div class="col-md-6">
-                                            <label class="form-label text-muted">Registration Purpose </label>
-                                            <select id="country" name="country" class="form-select form-control"
+                                            <label for="customer_type" class="form-label text-muted">Registration Purpose </label>
+                                            <select id="customer_type" name="customer_type" class="form-select form-control"
                                                 required>
-                                                <option selected value="individual">Individual</option>
-                                                <option value="company">Company</option>
+                                                <option selected value="Individual">Individual</option>
+                                                <option value="Company">Company</option>
                                             </select>
                                         </div>
                                         <div class="col-md-6">
-                                            <label class="form-label text-muted">Registration Period </label>
+                                            <label for="tld_price" class="form-label text-muted">Registration Period </label>
                                             <select id="tld_price" name="tld_price" class="form-select form-control"
                                                 required>
                                                 <option selected value="id">1 year - ৳1100</option>
@@ -106,115 +94,176 @@
                             </div>
 
                             <h4 class="text-white card-heading"> Contact Information </h4>
-                            <div class="card shadow rounded mb-4 border-0">
+                            <div class="card shadow rounded mb-4">
                                 <div class="card-body">
-                                    <div class="row mb-20">
-                                        <div class="col-md-6">
-                                            <div class="mb-3">
-                                                <label for="name" class="form-label text-muted">Full name <span
-                                                        class="text-danger">*</span></label>
-                                                <div class="form-icon position-relative">
-                                                    <i data-feather="user" class="fea icon-sm icons"></i>
-                                                    <input id="name" type="text" class="form-control ps-5"
-                                                        placeholder="Full name" name="name" required
-                                                        autocomplete="on" />
+                                    <div id="authSection">
+                                        <ul class="nav nav-pills mb-4 nav-justified flex-column flex-sm-row rounded tab-section">
+                                            <li class="nav-item">
+                                                <a data-id="login" href="javascript:void(0)" class="nav-link active">
+                                                    <div class="text-center py-1">
+                                                        <h6 class="mb-0">Login</h6>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                            
+                                            <li class="nav-item">
+                                                <a data-id="register" href="javascript:void(0)" class="nav-link">
+                                                    <div class="text-center py-1">
+                                                        <h6 class="mb-0">Register</h6>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div id="registrantSection" style="display: none;">
+                                        <div class="row mb-20 bg-white rounded">
+                                            <div class="col-md-12 border border-dark-subtle rounded">
+                                                <div class="mb-3 p-2">
+                                                    <label for="registrant" class="form-label text-muted">Registrant Contact </label>
+                                                    <div class="position-relative">
+                                                        <select id="registrant" name="registrant"
+                                                            class="form-select form-control">
+                                                            <option selected value="0">Use My Profile Info</option>
+                                                            <option value="1">Create New</option>
+                                                        </select>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            <div class="mb-3">
-                                                <label for="company" class="form-label text-muted">Company </label>
-                                                <div class="form-icon position-relative">
-                                                    <i data-feather="user" class="fea icon-sm icons"></i>
-                                                    <input id="company" type="text" class="form-control ps-5"
-                                                        placeholder="Company" name="company" autocomplete="on" />
+                                    </div>
+                                    <div id="loginAlert"></div> 
+                                    <div id="registrantLoginSection">
+                                        <form id="registrantForm" style="display: none">
+                                            <div class="row mb-20">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label for="fullname" class="form-label text-muted">
+                                                            Full name 
+                                                            <span class="text-danger">*</span>
+                                                        </label>
+                                                        <div class="form-icon position-relative">
+                                                            <i data-feather="user" class="fea icon-sm icons"></i>
+                                                            <input id="fullname" type="text" class="form-control ps-5" placeholder="Full name" name="fullname" required autocomplete="on" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label for="company" class="form-label text-muted">Company </label>
+                                                        <div class="form-icon position-relative">
+                                                            <i data-feather="user" class="fea icon-sm icons"></i>
+                                                            <input id="company" type="text" class="form-control ps-5"
+                                                                placeholder="Company" name="company" autocomplete="on" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label for="email" class="form-label text-muted">Email <span
+                                                                class="text-danger">*</span></label>
+                                                        <div class="form-icon position-relative">
+                                                            <i data-feather="user-check" class="fea icon-sm icons"></i>
+                                                            <input id="email" type="email" class="form-control ps-5"
+                                                                placeholder="Email" name="email" required
+                                                                autocomplete="on" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label for="mobile" class="form-label text-muted">Mobile <span
+                                                                class="text-danger">*</span></label>
+                                                        <div class="form-icon position-relative">
+                                                            <i data-feather="phone" class="fea icon-sm icons"></i>
+                                                            <input id="mobile" type="text" class="form-control ps-5"
+                                                                placeholder="Mobile" name="mobile" required
+                                                                autocomplete="on" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label for="NID" class="form-label text-muted">National ID <span
+                                                                class="text-danger">*</span></label>
+                                                        <div class="form-icon position-relative">
+                                                            <i data-feather="user" class="fea icon-sm icons"></i>
+                                                            <input id="NID" type="text" class="form-control ps-5"
+                                                                placeholder="NID" name="NID" autocomplete="on" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label for="city" class="form-label text-muted">City <span
+                                                                class="text-danger">*</span></label>
+                                                        <div class="position-relative">
+                                                            <input id="city" type="text" class="form-control"
+                                                                placeholder="City" name="city" required
+                                                                autocomplete="on" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label for="post" class="form-label text-muted">Postal code <span
+                                                                class="text-danger">*</span></label>
+                                                        <div class="position-relative">
+                                                            <input id="post" type="text" class="form-control"
+                                                                placeholder="Post" name="post" autocomplete="on" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label for="state" class="form-label text-muted">State </label>
+                                                        <div class="position-relative">
+                                                            <select id="state" name="country"
+                                                                class="form-select form-control" required>
+                                                                <option selected value="Dhaka">Dhaka</option>
+                                                                <option value="Chittagong">Chittagong</option>
+                                                                <option value="Rajshahi">Rajshahi</option>
+                                                                <option value="Khulna">Khulna</option>
+                                                                <option value="Barisal">Barisal</option>
+                                                                <option value="Sylhet">Sylhet</option>
+                                                                <option value="Rangpur">Rangpur</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="mb-3">
+                                                        <label for="address" class="form-label text-muted">Address <span
+                                                                class="text-danger">*</span></label>
+                                                        <div class="position-relative">
+                                                            <input id="address" type="text" class="form-control"
+                                                                placeholder="Address" name="address" required
+                                                                autocomplete="on" />
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="mb-3">
-                                                <label for="email" class="form-label text-muted">Email <span
-                                                        class="text-danger">*</span></label>
-                                                <div class="form-icon position-relative">
-                                                    <i data-feather="user-check" class="fea icon-sm icons"></i>
-                                                    <input id="email" type="email" class="form-control ps-5"
-                                                        placeholder="Email" name="email" required
-                                                        autocomplete="on" />
+                                        </form>
+                                        <form id="loginForm">
+                                            <div class="row mb-20">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label for="username" class="form-label text-muted">Username <span class="text-danger">*</span></label>
+                                                        <div class="position-relative">
+                                                            <input id="username" type="text" class="form-control" placeholder="Username" name="username" required autocomplete="on"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="password"  class="form-label text-muted">Password <span class="text-danger">*</span></label>
+                                                    <div class="position-relative">
+                                                        <input id="password" required type="password" class="form-control" placeholder="Password" name="password" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <button type="submit" class="btn btn-block btn-primary loginButton"> Login </button>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="mb-3">
-                                                <label for="mobile" class="form-label text-muted">Mobile <span
-                                                        class="text-danger">*</span></label>
-                                                <div class="form-icon position-relative">
-                                                    <i data-feather="phone" class="fea icon-sm icons"></i>
-                                                    <input id="mobile" type="text" class="form-control ps-5"
-                                                        placeholder="Mobile" name="mobile" required
-                                                        autocomplete="on" />
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="mb-3">
-                                                <label for="NID" class="form-label text-muted">National ID <span
-                                                        class="text-danger">*</span></label>
-                                                <div class="form-icon position-relative">
-                                                    <i data-feather="user" class="fea icon-sm icons"></i>
-                                                    <input id="NID" type="text" class="form-control ps-5"
-                                                        placeholder="NID" name="NID" autocomplete="on" />
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="mb-3">
-                                                <label for="city" class="form-label text-muted">City <span
-                                                        class="text-danger">*</span></label>
-                                                <div class="position-relative">
-                                                    <input id="city" type="text" class="form-control"
-                                                        placeholder="City" name="city" required
-                                                        autocomplete="on" />
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="mb-3">
-                                                <label for="post" class="form-label text-muted">Postal code <span
-                                                        class="text-danger">*</span></label>
-                                                <div class="position-relative">
-                                                    <input id="post" type="text" class="form-control"
-                                                        placeholder="Post" name="post" autocomplete="on" />
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="mb-3">
-                                                <label for="State" class="form-label text-muted">State </label>
-                                                <div class="position-relative">
-                                                    <select id="state" name="country"
-                                                        class="form-select form-control" required>
-                                                        <option selected value="dhaka">Dhaka</option>
-                                                        <option value="Chittagong">Chittagong</option>
-                                                        <option value="Rajshahi">Rajshahi</option>
-                                                        <option value="Khulna">Khulna</option>
-                                                        <option value="Barisal">Barisal</option>
-                                                        <option value="Sylhet">Sylhet</option>
-                                                        <option value="Rangpur">Rangpur</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="mb-3">
-                                                <label for="address" class="form-label text-muted">Address <span
-                                                        class="text-danger">*</span></label>
-                                                <div class="position-relative">
-                                                    <input id="address" type="text" class="form-control"
-                                                        placeholder="Address" name="address" required
-                                                        autocomplete="on" />
-                                                </div>
-                                            </div>
-                                        </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -306,8 +355,8 @@
                                             <div class="d-flex justify-content-between align-items-start">
                                                 <div>
                                                     <p class="fw-semibold mb-1 selectedDomain"></p>
-                                                    <small class="text-muted text-capitalize d-block">individual</small>
-                                                    <small class="text-muted">1 Year</small>
+                                                    <small class="text-muted text-capitalize d-block label_customer_type">Individual</small>
+                                                    <small class="text-muted years_label">1 Year</small>
                                                 </div>
                                             </div>
                                         </div>
@@ -316,20 +365,20 @@
                                         <div class="small mb-3">
                                             <div class="d-flex justify-content-between mb-1">
                                                 <span class="text-muted">Subtotal:</span>
-                                                <span class="fw-medium">৳1,100</span>
+                                                <span class="fw-medium" id="subtotal">৳0</span>
                                             </div>
                                             <div class="d-flex justify-content-between mb-1">
                                                 <span class="text-muted">VAT (15%):</span>
-                                                <span class="fw-medium">৳165</span>
+                                                <span class="fw-medium" id="vat">৳0</span>
                                             </div>
                                             <div class="d-flex justify-content-between mb-2 text-warning">
                                                 <span class="text-muted">Gateway Charge:</span>
-                                                <span class="fw-medium">৳31.63</span>
+                                                <span class="fw-medium" id="gateway">৳0</span>
                                             </div>
 
                                             <div class="d-flex justify-content-between border-top pt-2 mt-2 fs-5 fw-bold">
                                                 <span>Total:</span>
-                                                <span>৳1296.63</span>
+                                                <span id="total">৳0</span>
                                             </div>
                                         </div>
 
@@ -373,6 +422,42 @@
     
     <script type="text/javascript">
         $(document).ready(function () {
+            function getPricing(){
+                const name = $("#name").val().trim();
+                const ext = $("#extension").val();
+                const domain = name + ext;
+                if (!domain) return;
+
+                const tld = domain.substring(domain.indexOf('.'));
+
+                $.ajax({
+                    url: "http://127.0.0.1:8001/api/domains",
+                    method: "GET",
+                    success: function (res) {
+                        if (!res.success) return;
+
+                        const domainData = res.data.find(item => item.name === tld);
+                        if (!domainData) return console.warn("TLD not found");
+
+                        let options = ``;
+                        domainData.prices.forEach(p => {
+                            const selected = p.years === 1 ? "selected" : "";
+                            options += `<option value="${p.id}" ${selected}>
+                                ${p.years} year${p.years > 1 ? 's' : ''} - ৳${p.register_price}
+                            </option>`;
+                        });
+
+                        $("#tld_price").html(options);
+                        $("#tld_price").trigger("change");
+                    },
+                    error: function (err) {
+                        console.error("API Error:", err);
+                    }
+                });
+            }
+            
+            const token = localStorage.getItem("token");
+            const savedUser = localStorage.getItem("user");
             // Show clear button when typing or after search
             $('#name').on('input', function () {
                 $('#clearSearch').toggle($(this).val().length > 0);
@@ -384,15 +469,39 @@
                     $('#clearSearch').show();
                 }
             });
+            $("#customer_type").on("change", function () {
+                var customer = $('#customer_type').val();
+                $('.label_customer_type').text(customer);
+            });
+            $("#tld_price").on("change", function () {
+                const text = $("#tld_price option:selected").text().trim(); 
+                // format is like "1 year - ৳1100.00"
 
+                const year = text.split(" ")[0]; // "1"
+                const price = text.split("৳")[1]; // "1100.00"
+
+                const subtotal = parseFloat(price);
+                const vat = subtotal * 0.15;
+                const gateway = subtotal * 0.02875; // 2.875% 
+                const total = subtotal + vat + gateway;
+
+                $(".years_label").text(year + " " + (year > 1 ? "Years" : "Year"));
+                $("#subtotal").text("৳" + subtotal.toFixed(2));
+                $("#vat").text("৳" + vat.toFixed(2));
+                $("#gateway").text("৳" + gateway.toFixed(2));
+                $("#total").text("৳" + total.toFixed(2));
+            });
             // Clear input when clicking ✖
             $('#clearSearch').on('click', function () {
                 $('#name').val('').focus();
                 $(this).hide();
                 $('#resultAlert').text('');
+                $('.register-domain-section').hide();
             });
             $('.search-again').on('click', function () {
+                $('#clearSearch').hide();
                 $('.register-domain-section').hide();
+                //clear the cart
                 $("#resultAlert").text('');
                 $("#name").val('');
                 $('html, body').animate({ scrollTop: 0 }, 600);
@@ -463,63 +572,167 @@
                     }
                 });
             });
-        });
-    </script>
-    <script>
-    $(document).ready(function () {
-        $(document).on('click', '.register-now', function () {
-            $('.register-domain-section').show();
-        });
-
-        const apiURL = "http://127.0.0.1:8001/api/domains";
-
-        $.get(apiURL, function (res) {
-            if (!res.success) return console.error("API Error");
-
-            const allTlds = res.data;
-            const activeTlds = res.data.filter(t => t.status === "active");
-
-            let options = ``;
-            let cards = ``;
-
-            activeTlds.forEach(tld => {
-                options += `<option value="${tld.name}">${tld.name}</option>`;
+        
+            $(document).on('click', '.register-now', function () {
+                getPricing();
+                $('.register-domain-section').show();
+                var customer = $('#customer_type').val();
+                $('.label_customer_type').text(customer);
             });
 
-            allTlds.forEach(tld => {
-                const oneYear = tld.prices.find(p => p.years === 1);
-                const renewalPrice = oneYear ? `Renewal ${oneYear.renewal_price}/year` : "Renewal price not found";
+            const apiURL = "http://127.0.0.1:8001/api/domains";
 
-                const statusBadge = tld.status === "active"
-                    ? ``
-                    : `<span class="badge bg-secondary">Commingsoon</span>`;
+            $.get(apiURL, function (res) {
+                if (!res.success) return console.error("API Error");
 
-                cards += `
-                <div class="col-12 col-md-6 col-lg-3 mb-8">
-                    <div class="card-wrapper">
-                        <div class="back-card"></div>
-                        <div class="top-card">
-                            <div class="card-content">
-                                <div class="text-end mb-2">${statusBadge}</div>
-                                <h2 class="fw-semibold text-primary text-center">${tld.name.toUpperCase()}</h2>
-                                <h3 class="fw-semibold text-secondary text-center fs-5">${tld.prices[0].register_price}/1st year</h3>
-                                <ul class="list-unstyled text-muted">
-                                    <li class="mb-1"><span class="text-primary h5 me-2"><i class="uil uil-check-circle"></i></span>Perfect for businesses</li>
-                                    <li class="mb-1"><span class="text-primary h5 me-2"><i class="uil uil-check-circle"></i></span>Instant activation</li>
-                                    <li class="mb-1"><span class="text-primary h5 me-2"><i class="uil uil-check-circle"></i></span>Free DNS management</li>
-                                    <li class="mb-1"><span class="text-primary h5 me-2"><i class="uil uil-check-circle"></i></span>Email forwarding</li>
-                                    <li class="mb-1"><span class="text-primary h5 me-2"><i class="uil uil-check-circle"></i></span>24/7 support</li>
-                                    <li class="mb-1"><span class="text-primary h5 me-2"><i class="uil uil-check-circle"></i></span>${renewalPrice}</li>
-                                </ul>
+                const allTlds = res.data;
+                const activeTlds = res.data.filter(t => t.status === "active");
+
+                let options = ``;
+                let cards = ``;
+
+                activeTlds.forEach(tld => {
+                    options += `<option value="${tld.name}">${tld.name}</option>`;
+                });
+
+                allTlds.forEach(tld => {
+                    const oneYear = tld.prices.find(p => p.years === 1);
+                    const renewalPrice = oneYear ? `Renewal ${oneYear.renewal_price}/year` : "Renewal price not found";
+
+                    const statusBadge = tld.status === "active"
+                        ? ``
+                        : `<span class="badge bg-secondary">Commingsoon</span>`;
+
+                    cards += `
+                    <div class="col-12 col-md-6 col-lg-3 mb-8">
+                        <div class="card-wrapper">
+                            <div class="back-card"></div>
+                            <div class="top-card">
+                                <div class="card-content">
+                                    <div class="text-end mb-2">${statusBadge}</div>
+                                    <h2 class="fw-semibold text-primary text-center">${tld.name.toUpperCase()}</h2>
+                                    <h3 class="fw-semibold text-secondary text-center fs-5">${tld.prices[0].register_price}/1st year</h3>
+                                    <ul class="list-unstyled text-muted">
+                                        <li class="mb-1"><span class="text-primary h5 me-2"><i class="uil uil-check-circle"></i></span>Perfect for businesses</li>
+                                        <li class="mb-1"><span class="text-primary h5 me-2"><i class="uil uil-check-circle"></i></span>Instant activation</li>
+                                        <li class="mb-1"><span class="text-primary h5 me-2"><i class="uil uil-check-circle"></i></span>Free DNS management</li>
+                                        <li class="mb-1"><span class="text-primary h5 me-2"><i class="uil uil-check-circle"></i></span>Email forwarding</li>
+                                        <li class="mb-1"><span class="text-primary h5 me-2"><i class="uil uil-check-circle"></i></span>24/7 support</li>
+                                        <li class="mb-1"><span class="text-primary h5 me-2"><i class="uil uil-check-circle"></i></span>${renewalPrice}</li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>`;
+                    </div>`;
+                });
+
+                $("#extension").html(options); // only active TLDs
+                $("#domainCardsContainer").html(cards); // all TLDs
+            });
+        
+            function fillUserData() {
+                if (!window.userProfile) return;
+                $("#fullname").val(userProfile.full_name || "");
+                $("#email").val(userProfile.email || "");
+                $("#mobile").val(userProfile.info.mobile || "");
+                $("#company").val(userProfile.info.company || "");
+                $("#NID").val(userProfile.info.nid || "");
+                $("#city").val(userProfile.info.city || "");
+                $("#post").val(userProfile.info.postal_code || "");
+                $("#state").val(userProfile.info.state || "").change();
+                $("#address").val(userProfile.info.address || "");
+            }
+            
+            function checkToken(){
+                const token = localStorage.getItem("token");
+                if (token) {
+                    $("#authSection").hide();
+                    $("#registrantSection").show();
+                    // $('#registrantLoginSection').hide();
+                    $('#registrantLoginSection, #registrantForm').show();
+                    $('#loginForm').hide();
+                    if (token && savedUser) {
+                        window.userProfile = JSON.parse(savedUser);
+                        if (typeof fillUserData === "function") {
+                            fillUserData();
+                        }
+                    }
+                } else {
+                    $("#authSection").show();
+                    $('#registrantLoginSection').show();
+                    $("#registrantSection").hide();
+                }
+            }
+            checkToken();
+            fillUserData();
+            $('.tab-section .nav-link').on('click', function (e) {
+                e.preventDefault();
+                $(this).data('id') === 'login' ? $('#loginForm').show() && $('#registrantForm').hide() : $('#loginForm').hide() && $('#registrantForm').show();
+                $('.tab-section .nav-link').removeClass('active');
+                $(this).addClass('active');
             });
 
-            $("#extension").html(options); // only active TLDs
-            $("#domainCardsContainer").html(cards); // all TLDs
+            // Change dropdown action
+            $("#registrant").on("change", function () {
+                if ($(this).val() == "0") {
+                    fillUserData();
+                } else {
+                    $("#registrantForm input").val("");
+                }
+            });
+
+            $('#loginForm').submit(function (e) {
+                e.preventDefault();
+
+                let username = $('#username').val();
+                let password = $('#password').val();
+
+                $.ajax({
+                    url: "http://127.0.0.1:8001/api/customer/login",
+                    type: "POST",
+                    dataType: "json",
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        email: username,
+                        password: password
+                    }),
+                    success: function (response) {
+                        if (response?.success) {
+                            window.userProfile = response.user;
+                            if (typeof fillUserData === "function") {
+                                fillUserData();
+                            }
+                            // ✅ Store token
+                            localStorage.setItem("token", response.token);
+                            localStorage.setItem("user", JSON.stringify(response.user));
+
+                            // ✅ Success banner
+                            $('#loginAlert').html(`
+                                <div class="alert alert-success" id="loginSuccessAlert">Login successful! </div>
+                            `);
+                            if (typeof checkToken === "function") {
+                                checkToken();
+                            }
+                            setTimeout(() => {
+                                $('#loginSuccessAlert').fadeOut(300, function() {
+                                    $(this).remove();
+                                });
+                            }, 5000);
+                        }
+                    },
+                    error: function (xhr) {
+                        let msg = "Something went wrong";
+
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            msg = xhr.responseJSON.message;
+                        }
+
+                        $('#loginAlert').html(`
+                            <div class="alert alert-danger">${msg}</div>
+                        `);
+                    }
+                });
+            });
         });
-    });
     </script>
 @endsection

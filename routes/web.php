@@ -31,8 +31,24 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/customer/dashboard', function () {
-    return view('customer.dashboard');  // create this blade file
+    return view('customer.dashboard'); 
 })->name('customer.dashboard');
+
+Route::get('/customer/domains', function () {
+    return view('customer.domains');
+})->name('customer.domains');
+
+Route::get('/customer/billing', function () {
+    return view('customer.billing');
+})->name('customer.billing');
+
+Route::get('/customer/profile', function () {
+    return view('customer.profile');
+})->name('customer.profile');
+
+Route::get('/contact', function () {
+    return view('contact');
+})->name('contact');
 
 require __DIR__.'/auth.php';
 require __DIR__.'/customer.php';

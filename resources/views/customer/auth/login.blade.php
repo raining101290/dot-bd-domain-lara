@@ -93,9 +93,9 @@
                             `);
 
                             // ✅ Redirect after delay
-                            setTimeout(() => {
-                                window.location.href = "/customer/dashboard";
-                            }, 1000);
+                            // setTimeout(() => {
+                            //     window.location.href = "/customer/dashboard";
+                            // }, 1000);
                         }
                     },
                     error: function (xhr) {

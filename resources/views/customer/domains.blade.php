@@ -11,6 +11,7 @@
 
     <div class="page-wrapper toggled">
         @include('customer.common.sidebar')
+
         <main class="page-content bg-light">
             @include('customer.common.topheader')
 
@@ -45,7 +46,7 @@
                                         <i class="uil uil-globe fs-4 mb-0"></i>
                                     </div>
                                     <div class="flex-1 ms-3">
-                                        <h6 class="mb-0 text-muted">Total Domains</h6>
+                                        <h6 class="mb-0 text-muted">Total</h6>
                                         <p class="fs-5 text-dark fw-bold mb-0">
                                             <span class="counter-value" data-target="5">0</span>
                                         </p>
@@ -62,7 +63,7 @@
                                         <i class="uil uil-globe fs-4 mb-0 text-success"></i>
                                     </div>
                                     <div class="flex-1 ms-3">
-                                        <h6 class="mb-0 text-muted">Active Domains</h6>
+                                        <h6 class="mb-0 text-muted">Active</h6>
                                         <p class="fs-5 text-dark fw-bold mb-0">
                                             <span class="counter-value" data-target="5">0</span>
                                         </p>
@@ -76,12 +77,12 @@
                                 class="features feature-primary d-flex justify-content-between align-items-center rounded shadow p-3">
                                 <div class="d-flex align-items-center">
                                     <div class="icon text-center rounded-pill">
-                                        <i class="uil uil-file-info-alt fs-4 mb-0 text-danger"></i>
+                                        <i class="uil uil-globe fs-4 mb-0 text-danger"></i>
                                     </div>
                                     <div class="flex-1 ms-3">
-                                        <h6 class="mb-0 text-muted">Unpaid Invoices</h6>
+                                        <h6 class="mb-0 text-muted">Pending</h6>
                                         <p class="fs-5 text-dark fw-bold mb-0">
-                                            <span class="counter-value" data-target="5">0</span>
+                                            <span class="counter-value" data-target="1">1</span>
                                         </p>
                                     </div>
                                 </div>
@@ -93,12 +94,12 @@
                                 class="features feature-primary d-flex justify-content-between align-items-center rounded shadow p-3">
                                 <div class="d-flex align-items-center">
                                     <div class="icon text-center rounded-pill">
-                                        <i class="uil uil-usd-circle fs-4 mb-0 text-danger"></i>
+                                        <i class="uil uil-globe fs-4 mb-0 text-danger"></i>
                                     </div>
                                     <div class="flex-1 ms-3">
-                                        <h6 class="mb-0 text-muted">Amount Due</h6>
+                                        <h6 class="mb-0 text-muted">Expired</h6>
                                         <p class="fs-5 text-dark fw-bold mb-0">
-                                            <span class="counter-value" data-target="2000">5</span>
+                                            <span class="counter-value" data-target="2">0</span>
                                         </p>
                                     </div>
                                 </div>
@@ -108,44 +109,22 @@
 
                     <div class="row">
                         <div class="col-12 mt-4">
-                            <div class="card shadow-sm rounded">
-                                <div class="card-body pb-2">
-                                    <h5 class="card-title mb-1">Quick Actions</h5>
-                                    <p class="text-muted small">Access frequently used features</p>
-                                </div>
-
-                                <div class="card-body pt-0">
-                                    <div class="row g-3 text-center">
-                                        <div class="col-6 col-sm-3">
-                                            <a href="/order/domain"
-                                                class="btn w-100 py-3 d-flex flex-column align-items-center quick-btn text-primary">
-                                                <i class="uil uil-plus fs-4 mb-0"></i>
-                                                <span class="small fw-medium">Register Domain</span>
-                                            </a>
+                            <div class="card shadow-sm rounded border">
+                                <div class="card-body p-4">
+                                    <div class="row align-items-center">
+                                        <div class="col-12 col-sm">
+                                            <div class="position-relative">
+                                                <i class="uil uil-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted fs-5"></i>
+                                                <input class="form-control form-control-lg ps-5" type="text" placeholder="Search domains..." />
+                                            </div>
                                         </div>
-
-                                        <div class="col-6 col-sm-3">
-                                            <a href=""
-                                                class="btn w-100 py-3 d-flex flex-column align-items-center quick-btn text-success">
-                                                <i class="uil uil-usd-circle fs-4 mb-0"></i>
-                                                <span class="small fw-medium">Billing</span>
-                                            </a>
-                                        </div>
-
-                                        <div class="col-6 col-sm-3">
-                                            <a href=""
-                                                class="btn w-100 py-3 d-flex flex-column align-items-center quick-btn text-warning">
-                                                <i class="uil uil-question fs-4 mb-0"></i>
-                                                <span class="small fw-medium">Support</span>
-                                            </a>
-                                        </div>
-
-                                        <div class="col-6 col-sm-3">
-                                            <a href=""
-                                                class="btn w-100 py-3 d-flex flex-column align-items-center quick-btn text-secondary">
-                                                <i class="uil uil-setting fs-4 mb-0"></i>
-                                                <span class="small fw-medium">Settings</span>
-                                            </a>
+                                        <div class="col-12 col-sm-auto">
+                                            <select class="form-select bg-light">
+                                                <option selected>All Status</option>
+                                                <option>Active</option>
+                                                <option>Pending</option>
+                                                <option>Expired</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -154,57 +133,28 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-12 col-md-6 mt-4">
+                        <div class="col-12 mt-4">
                             <div class="card shadow-sm rounded">
                                 <div class="card-body d-flex align-items-center justify-content-between pb-2">
                                     <div>
                                         <h5 class="mb-1">My Domains</h5>
                                         <p class="text-muted small mb-0">Manage and monitor your registered domains</p>
                                     </div>
-
-                                    <button class="btn btn-light btn-sm d-flex align-items-center">
-                                        View All
-                                        <i class="uil uil-arrow-up-right fs-6 mb-0 ms-1"></i>
-                                    </button>
+                                    <span class="badge rounded-pill bg-soft-success fs-6">
+                                        <i class="uil uil-globe text-success"></i> 0 Domains
+                                    </span>
                                 </div>
 
                                 <div class="card-body pt-0">
                                     <div class="text-center py-5">
                                         <i class="uil uil-globe text-secondary mb-3" style="font-size:48px;"></i>
-                                        <p class="text-muted small mb-1">You don't have any domains yet.</p>
-                                        <p class="text-muted small mb-3">Start by registering your first domain</p>
+                                        <h4 class="text-dark">No domains found</h4>
+                                        <p class="text-muted small mb-3">Get started by registering your first domain</p>
 
-                                        <button class="btn btn-primary btn-sm d-inline-flex align-items-center">
+                                        <a href="/order/domain" class="btn btn-primary btn-sm d-inline-flex align-items-center">
                                             <i class="uil uil-plus fs-6 me-2"></i>
                                             Register Your First Domain
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6 mt-4">
-                            <div class="card shadow-sm rounded">
-                                <div class="card-body d-flex align-items-center justify-content-between pb-2">
-                                    <div>
-                                        <h5 class="mb-1">Recent Invoices</h5>
-                                        <p class="text-muted small mb-0">Your latest invoices and transactions</p>
-                                    </div>
-
-                                    <button class="btn btn-light btn-sm d-flex align-items-center">
-                                        View All
-                                        <i class="uil uil-arrow-up-right ms-1"></i>
-                                    </button>
-                                </div>
-                                <div class="card-body pt-0">
-                                    <div class="text-center py-5">
-                                        <i class="uil uil-chart-line text-secondary mb-3" style="font-size:48px;"></i>
-
-                                        <p class="text-muted mb-1">No recent activity</p>
-                                        <p class="text-muted small mb-3">Your invoices will appear here</p>
-                                        {{-- <button class="btn btn-primary d-inline-flex align-items-center">
-                                            <i class="uil uil-plus fs-6 me-2"></i>
-                                            View All Invoices
-                                        </button> --}}
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -216,4 +166,31 @@
             @include('customer.common.copyright')
         </main>
     </div>
+    <script type="text/javascript">
+        $('#logoutBtn').click(function() {
+            let token = localStorage.getItem("token");
+
+            $.ajax({
+                url: "http://127.0.0.1:8001/api/customer/logout",
+                type: "POST",
+                headers: {
+                    "Authorization": "Bearer " + token
+                },
+                success: function(response) {
+                    // ✅ clear local storage
+                    localStorage.removeItem("token");
+                    localStorage.removeItem("user");
+
+                    // ✅ redirect to login
+                    window.location.href = "/customer/login";
+                },
+                error: function() {
+                    // Even if token invalid, force logout on frontend
+                    localStorage.removeItem("token");
+                    localStorage.removeItem("user");
+                    window.location.href = "/customer/login";
+                }
+            });
+        });
+    </script>
 @endsection
