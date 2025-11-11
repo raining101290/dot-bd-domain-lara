@@ -38,7 +38,7 @@
                     </div>
                     <div class="row row-cols-xl-4 row-cols-md-2 row-cols-1">
                         <div class="col mt-4">
-                            <a href="#!"
+                            <a href="/customer/domains"
                                 class="features feature-primary d-flex justify-content-between align-items-center rounded shadow p-3">
                                 <div class="d-flex align-items-center">
                                     <div class="icon text-center rounded-pill">
@@ -55,7 +55,7 @@
                         </div>
 
                         <div class="col mt-4">
-                            <a href="#!"
+                            <a href="/customer/domains"
                                 class="features feature-primary d-flex justify-content-between align-items-center rounded shadow p-3">
                                 <div class="d-flex align-items-center">
                                     <div class="icon text-center rounded-pill">
@@ -72,7 +72,7 @@
                         </div>
 
                         <div class="col mt-4">
-                            <a href="#!"
+                            <a href="/customer/billing"
                                 class="features feature-primary d-flex justify-content-between align-items-center rounded shadow p-3">
                                 <div class="d-flex align-items-center">
                                     <div class="icon text-center rounded-pill">
@@ -98,7 +98,7 @@
                                     <div class="flex-1 ms-3">
                                         <h6 class="mb-0 text-muted">Amount Due</h6>
                                         <p class="fs-5 text-dark fw-bold mb-0">
-                                            <span class="counter-value" data-target="2000">5</span>
+                                            <span>৳2000</span>
                                         </p>
                                     </div>
                                 </div>
@@ -125,7 +125,7 @@
                                         </div>
 
                                         <div class="col-6 col-sm-3">
-                                            <a href=""
+                                            <a href="/customer/billing"
                                                 class="btn w-100 py-3 d-flex flex-column align-items-center quick-btn text-success">
                                                 <i class="uil uil-usd-circle fs-4 mb-0"></i>
                                                 <span class="small fw-medium">Billing</span>
@@ -133,7 +133,7 @@
                                         </div>
 
                                         <div class="col-6 col-sm-3">
-                                            <a href=""
+                                            <a href="/contact"
                                                 class="btn w-100 py-3 d-flex flex-column align-items-center quick-btn text-warning">
                                                 <i class="uil uil-question fs-4 mb-0"></i>
                                                 <span class="small fw-medium">Support</span>
@@ -141,7 +141,7 @@
                                         </div>
 
                                         <div class="col-6 col-sm-3">
-                                            <a href=""
+                                            <a href="/customer/profile"
                                                 class="btn w-100 py-3 d-flex flex-column align-items-center quick-btn text-secondary">
                                                 <i class="uil uil-setting fs-4 mb-0"></i>
                                                 <span class="small fw-medium">Settings</span>
@@ -162,10 +162,10 @@
                                         <p class="text-muted small mb-0">Manage and monitor your registered domains</p>
                                     </div>
 
-                                    <button class="btn btn-light btn-sm d-flex align-items-center">
+                                    <a href="/customer/domains" class="btn btn-light btn-sm d-flex align-items-center">
                                         View All
                                         <i class="uil uil-arrow-up-right fs-6 mb-0 ms-1"></i>
-                                    </button>
+                                    </a>
                                 </div>
 
                                 <div class="card-body pt-0">
@@ -190,10 +190,10 @@
                                         <p class="text-muted small mb-0">Your latest invoices and transactions</p>
                                     </div>
 
-                                    <button class="btn btn-light btn-sm d-flex align-items-center">
+                                    <a href="/customer/billing" class="btn btn-light btn-sm d-flex align-items-center">
                                         View All
                                         <i class="uil uil-arrow-up-right ms-1"></i>
-                                    </button>
+                                    </a>
                                 </div>
                                 <div class="card-body pt-0">
                                     <div class="text-center py-5">
@@ -201,10 +201,6 @@
 
                                         <p class="text-muted mb-1">No recent activity</p>
                                         <p class="text-muted small mb-3">Your invoices will appear here</p>
-                                        {{-- <button class="btn btn-primary d-inline-flex align-items-center">
-                                            <i class="uil uil-plus fs-6 me-2"></i>
-                                            View All Invoices
-                                        </button> --}}
                                     </div>
                                 </div>
                             </div>

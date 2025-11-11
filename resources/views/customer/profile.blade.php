@@ -41,23 +41,23 @@
                         <div class="col-md-12 mt-4 pt-2">
                              <ul class="nav nav-pills mb-2 nav-justified flex-column flex-sm-row rounded" id="pills-tab" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link active" id="webdeveloping" data-bs-toggle="pill" href="#developing" role="tab" aria-controls="developing" aria-selected="false">
+                                    <a class="nav-link" id="account-tab-btn" data-bs-toggle="pill" href="#account" role="tab">
                                         <div class="text-center py-1">
                                             <h6 class="mb-0">Account</h6>
                                         </div>
                                     </a>
                                 </li>
-                                
+
                                 <li class="nav-item">
-                                    <a class="nav-link" id="database" data-bs-toggle="pill" href="#data-analise" role="tab" aria-controls="data-analise" aria-selected="false">
+                                    <a class="nav-link" id="profile-tab-btn" data-bs-toggle="pill" href="#profile" role="tab">
                                         <div class="text-center py-1">
                                             <h6 class="mb-0">Profile Information</h6>
                                         </div>
                                     </a>
                                 </li>
-                                
+
                                 <li class="nav-item">
-                                    <a class="nav-link" id="server" data-bs-toggle="pill" href="#security" role="tab" aria-controls="security" aria-selected="false">
+                                    <a class="nav-link" id="security-tab-btn" data-bs-toggle="pill" href="#security" role="tab">
                                         <div class="text-center py-1">
                                             <h6 class="mb-0">Security</h6>
                                         </div>
@@ -68,7 +68,7 @@
 
                         <div class="col-md-12 col-12">
                             <div class="tab-content bg-white" id="pills-tabContent">
-                                <div class="tab-pane fade show active rounded shadow" id="developing" role="tabpanel" aria-labelledby="webdeveloping">
+                                <div class="tab-pane fade" id="account" role="tabpanel">
                                     <div class="card shadow-sm rounded">
                                         <div class="card-body pb-2">
                                             <h5 class="card-title mb-1">Account Information</h5>
@@ -106,7 +106,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="tab-pane fade rounded shadow" id="data-analise" role="tabpanel" aria-labelledby="database">
+                                <div class="tab-pane fade" id="profile" role="tabpanel">
                                     <div class="card shadow-sm rounded">
                                         <div class="card-body pb-2">
                                             <h5 class="card-title mb-1">Profile Information</h5>
@@ -443,7 +443,7 @@
                                     </div>
                                 </div>
 
-                                <div class="tab-pane fade rounded shadow" id="security" role="tabpanel" aria-labelledby="server">
+                                <div class="tab-pane fade" id="security" role="tabpanel">
                                     <div class="card shadow-sm rounded">
                                         <div class="card-body pb-2">
                                             <h5 class="card-title mb-1">Security</h5>
@@ -453,7 +453,7 @@
                                             </div>
                                             <form method="POST" action="">
                                                 <div class="row">
-                                                    <div class="col-12 col-md-6">
+                                                    <div class="col-12 col-md-6 pb-4">
                                                         <div class="mb-3">
                                                             <label for="password"  class="form-label text-muted">Current Password <span class="text-danger">*</span></label>
                                                             <div class="position-relative">
@@ -472,6 +472,11 @@
                                                                 <input id="cpassword" type="password" class="form-control" placeholder="Confirm Password" name="cpassword" />
                                                             </div>
                                                         </div>
+                                                        <div class="col-12">
+                                                            <div class="d-flex justify-content-end">
+                                                                <button type="submit" class="btn btn-primary">Update</button>
+                                                            </div>  
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </form>
@@ -487,4 +492,37 @@
             @include('customer.common.copyright')
         </main>
     </div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            const tabs = [
+                { hash: "#account", btn: "#account-tab-btn", pane: "#account" },
+                { hash: "#profile", btn: "#profile-tab-btn", pane: "#profile" },
+                { hash: "#security", btn: "#security-tab-btn", pane: "#security" },
+            ];
+
+            function activateTab(hash) {
+                const activeTab = tabs.find(t => t.hash === hash);
+                if (activeTab) {
+                    $('.nav-link').removeClass('active');
+                    $('.tab-pane').removeClass('show active');
+
+                    $(activeTab.btn).addClass('active');
+                    $(activeTab.pane).addClass('show active');
+                }
+            }
+
+            // On page load
+            if (window.location.hash) {
+                activateTab(window.location.hash);
+            } else {
+                $('.nav-link').first().addClass('active');
+                $('.tab-pane').first().addClass('show active');
+            }
+
+            // On hash change without refresh
+            $(window).on('hashchange', function () {
+                activateTab(window.location.hash);
+            });
+        });
+    </script>
 @endsection

@@ -40,9 +40,15 @@
                         </a>
                         <a class="dropdown-item text-dark" href="/customer/profile">
                             <span class="mb-0 d-inline-block me-1">
-                                <i class="ti ti-settings"></i>
+                                <i class="ti ti-user"></i>
                             </span>
                             Profile
+                        </a>
+                        <a class="dropdown-item text-dark" href="/customer/profile#security">
+                            <span class="mb-0 d-inline-block me-1">
+                                <i class="ti ti-settings"></i>
+                            </span>
+                            Chnage Password
                         </a>
                         <div class="dropdown-divider border-top"></div>
                         <a class="dropdown-item text-dark" href="#" id="logoutBtn">

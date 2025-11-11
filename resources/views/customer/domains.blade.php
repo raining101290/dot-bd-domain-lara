@@ -119,7 +119,7 @@
                                             </div>
                                         </div>
                                         <div class="col-12 col-sm-auto">
-                                            <select class="form-select bg-light">
+                                            <select class="form-select form-control">
                                                 <option selected>All Status</option>
                                                 <option>Active</option>
                                                 <option>Pending</option>
