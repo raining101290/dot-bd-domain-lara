@@ -824,6 +824,7 @@
                         showAlert("Registration successful!", "success");
                         domainPayload.append("customer_id", res.data.id);
                         placeDomainOrder(domainPayload);
+
                     },
                     error: function (xhr) {
                         let message = "Failed to create customer";
@@ -851,9 +852,12 @@
                     headers: token ? { "Authorization": "Bearer " + token } : {},
 
                     success: function () {
-                        showAlert("Domain order placed successfully!", "success");
+                        showAlert("Domain order placed successfully! Redirecting you to dashboard.", "success");
                         localStorage.removeItem("temp_customer_id");
                         resetAllForms();
+                        setTimeout(() => {
+                            window.location.href = "/customer/dashboard";
+                        }, 3000);
                     },
                     error: function (xhr) {
                         let message = "Failed to place Domain order";
