@@ -28,7 +28,7 @@
                         <a class="dropdown-item d-flex align-items-center text-dark pb-3" href="/customer/profile">
                             <img src="/backend/assets/images/client/imran-gray.jpeg" class="avatar avatar-md-sm rounded-circle border shadow" alt="" />
                             <div class="flex-1 ms-2">
-                                <span class="d-block">Imran</span>
+                                <span class="d-block fullname"></span>
                                 <small class="text-muted">Software Engineer</small>
                             </div>
                         </a>

@@ -17,26 +17,7 @@
 
             <div class="container-fluid">
                 <div class="layout-specing">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div>
-                            <h6 class="text-muted mb-1">Welcome back, User!</h6>
-                            <h5 class="mb-0">
-                                @if(request()->routeIs('customer.dashboard'))
-                                    Dashboard
-                                @elseif(request()->routeIs('customer.domains'))
-                                    My Domains
-                                @elseif(request()->routeIs('customer.billing'))
-                                    Billing & Invoices
-                                @elseif(request()->routeIs('customer.profile'))
-                                    My Profile
-                                @elseif(request()->routeIs('customer.support'))
-                                    Support
-                                @else
-                                    Page
-                                @endif
-                            </h5>
-                        </div>
-                    </div>
+                    @include('customer.common.pagetitle')
                     <div class="row">
                         <div class="col-md-12 mt-4 pt-2">
                              <ul class="nav nav-pills mb-2 nav-justified flex-column flex-sm-row rounded" id="pills-tab" role="tablist">
@@ -65,7 +46,7 @@
                                 </li>
                             </ul>
                         </div>
-
+                        <div id="alertBox"></div>
                         <div class="col-md-12 col-12">
                             <div class="tab-content bg-white" id="pills-tabContent">
                                 <div class="tab-pane fade" id="account" role="tabpanel">
@@ -76,7 +57,8 @@
                                             <div class="col-md-12">
                                                 <hr class="hr" />
                                             </div>
-                                            <form method="POST" action="">
+                                            
+                                            <form id="updateBasicForm" method="POST" action="">
                                                 <div class="row">
                                                     <div class="col-12 col-md-6">
                                                         <div class="mb-3">
@@ -114,7 +96,7 @@
                                             <div class="col-md-12">
                                                 <hr class="hr" />
                                             </div>
-                                            <form method="POST" action="">
+                                            <form id="updateOtherForm" method="POST" action="">
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <div class="mb-3">
@@ -136,10 +118,10 @@
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="mb-3">
-                                                            <label for="NID" class="form-label text-muted">NID </label>
+                                                            <label for="nid" class="form-label text-muted">NID </label>
                                                             <div class="form-icon position-relative">
                                                                 <i data-feather="user" class="fea icon-sm icons"></i>
-                                                                <input id="NID" type="text" class="form-control ps-5" placeholder="NID" name="NID"  autocomplete="on"/>
+                                                                <input id="nid" type="text" class="form-control ps-5" placeholder="NID" name="nid"  autocomplete="on"/>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -166,7 +148,7 @@
                                                         <div class="mb-3">
                                                             <label for="State" class="form-label text-muted">State  <span class="text-danger">*</span></label>
                                                             <div class="position-relative">
-                                                                <input id="State" type="text" class="form-control" placeholder="State" name="State" required  autocomplete="on"/>
+                                                                <input id="state" type="text" class="form-control" placeholder="State" name="State" required  autocomplete="on"/>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -451,13 +433,13 @@
                                             <div class="col-md-12">
                                                 <hr class="hr" />
                                             </div>
-                                            <form method="POST" action="">
+                                            <form id="changePassword" method="POST" action="">
                                                 <div class="row">
                                                     <div class="col-12 col-md-6 pb-4">
                                                         <div class="mb-3">
-                                                            <label for="password"  class="form-label text-muted">Current Password <span class="text-danger">*</span></label>
+                                                            <label for="cpassword"  class="form-label text-muted">Current Password <span class="text-danger">*</span></label>
                                                             <div class="position-relative">
-                                                                <input id="password" type="password" class="form-control" placeholder="Password" name="password" />
+                                                                <input id="cpassword" type="password" class="form-control" placeholder="Password" name="cpassword" />
                                                             </div>
                                                         </div>
                                                         <div class="mb-3">
@@ -467,9 +449,9 @@
                                                             </div>
                                                         </div>
                                                         <div class="mb-3">
-                                                            <label for="cpassword" class="form-label text-muted">Confirm New Password <span class="text-danger">*</span></label>
+                                                            <label for="cpassword2" class="form-label text-muted">Confirm New Password <span class="text-danger">*</span></label>
                                                             <div class="position-relative">
-                                                                <input id="cpassword" type="password" class="form-control" placeholder="Confirm Password" name="cpassword" />
+                                                                <input id="cpassword2" type="password" class="form-control" placeholder="Confirm Password" name="cpassword2" />
                                                             </div>
                                                         </div>
                                                         <div class="col-12">
@@ -525,4 +507,176 @@
             });
         });
     </script>
+
+    <script>
+    $(document).ready(function () {
+        const token = localStorage.getItem("token");
+        const user  = JSON.parse(localStorage.getItem("user") || "{}");
+        const customerId = user.id; // We only use this for the API URL
+
+        function showAlert(message, type = "success") {
+            $("#alertBox").html(`
+                <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            `);
+            setTimeout(() => $(".alert").alert('close'), 5000);
+        }
+
+        // Fetch customer data from API and prefill form
+        $.ajax({
+            url: `http://127.0.0.1:8001/api/customers/${customerId}`,
+            type: "GET",
+            headers: {
+                "Authorization": "Bearer " + token,
+                "Accept": "application/json"
+            },
+            success: function (res) {
+                const customer = res.data;
+                $("#name").val(customer.full_name);
+                $("#email").val(customer.email);
+                $(".fullname").text(customer.full_name);
+                $("#mobile").val(customer?.info?.mobile);
+                $("#company").val(customer?.info?.company);
+                $("#nid").val(customer?.info?.nid);
+                $("#address").val(customer?.info?.address);
+                $("#state").val(customer?.info?.state);
+                $("#city").val(customer?.info?.city);
+                $("#post").val(customer?.info?.postal_code);
+                $("#country").val(customer?.info?.country);
+            },
+            error: function () {
+                showAlert("Failed to load user info", "danger");
+            }
+        });
+
+        function isValidEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+
+        // 2. Update user info on form submit
+        $("#updateBasicForm").submit(function (e) {
+            e.preventDefault();
+
+            const fullName = $("#name").val().trim();
+            const email = $("#email").val().trim();
+
+            if (fullName.length < 3) return showAlert("Name must be at least 3 characters", "danger");
+            if (!isValidEmail(email)) return showAlert("Invalid email address", "danger");
+
+            $.ajax({
+                url: `http://127.0.0.1:8001/api/customers/${customerId}/update-basic`,
+                type: "PATCH",
+                contentType: "application/json",
+                headers: {
+                    "Authorization": "Bearer " + token,
+                    "Accept": "application/json"
+                },
+                data: JSON.stringify({ full_name: fullName, email }),
+                success: function (response) {
+                    showAlert(response.message, "success");
+                    $("#fullname, .fullname").text(response.data.full_name);
+                    $("#email").text(response.data.email);
+                },
+                error: function (xhr) {
+                    let msg = xhr.responseJSON?.message || "Update failed";
+                    if (xhr.responseJSON?.errors) {
+                        msg = Object.values(xhr.responseJSON.errors).map(e => e[0]).join("<br>");
+                    }
+                    showAlert(msg, "danger");
+                }
+            });
+        });
+
+        $("#updateOtherForm").submit(function (e) {
+            e.preventDefault();
+
+            const mobile = $("#mobile").val().trim();
+            const company = $("#company").val().trim();
+            const nid = $("#nid").val().trim();
+            const address = $("#address").val().trim();
+            const state = $("#state").val().trim();
+            const city = $("#city").val().trim();
+            const postal_code = $("#post").val().trim();  // your form uses id="post"
+            const country = $("#country").val().trim();
+
+            $.ajax({
+                url: `http://127.0.0.1:8001/api/customers/${customerId}/update-info`,
+                type: "PATCH",
+                contentType: "application/json",
+                headers: {
+                    "Authorization": "Bearer " + token,
+                    "Accept": "application/json"
+                },
+                data: JSON.stringify({ mobile, company, nid, address, city, state, postal_code, country }),
+
+                success: function (response) {
+                    console.log("Updated Data:", response.data);
+                    showAlert(response.message, "success");
+
+                    $("#mobile").val(response?.data?.mobile);
+                    $("#company").val(response?.data?.company);
+                    $("#nid").val(response?.data?.nid);
+                    $("#address").val(response?.data?.address);
+                    $("#city").val(response?.data?.city);
+                    $("#state").val(response?.data?.state);
+                    $("#post").val(response?.data?.postal_code);
+                    $("#country").val(response?.data?.country);
+                },
+                error: function (xhr) {
+                    let msg = xhr.responseJSON?.message || "Update failed";
+                    if (xhr.responseJSON?.errors) {
+                        msg = Object.values(xhr.responseJSON.errors).map(e => e[0]).join("<br>");
+                    }
+                    showAlert(msg, "danger");
+                }
+            });
+        });
+        
+        $("changePassword").submit(function (e) {
+            e.preventDefault();
+
+            const current_password = $("#cpassword").val().trim();
+            const new_password = $("#password").val().trim();
+            const confirm_password = $("#cpassword2").val().trim();
+
+            const token = localStorage.getItem("token");
+            const customerId = localStorage.getItem("customer_id");
+
+            $.ajax({
+                url: `http://127.0.0.1:8001/api/customers/${customerId}/update-password`,
+                type: "PATCH",
+                contentType: "application/json",
+                headers: {
+                    "Authorization": "Bearer " + token,
+                    "Accept": "application/json"
+                },
+                data: JSON.stringify({
+                    current_password,
+                    new_password,
+                    confirm_password
+                }),
+                success: function (response) {
+                    showAlert(response.message, "success");
+
+                    // clear fields after success
+                    $("#cpassword, #password, #cpassword2").val("");
+                },
+                error: function (xhr) {
+                    let msg = xhr.responseJSON?.message || "Password update failed";
+
+                    if (xhr.responseJSON?.errors) {
+                        msg = Object.values(xhr.responseJSON.errors)
+                            .map(e => e[0])
+                            .join("<br>");
+                    }
+
+                    showAlert(msg, "danger");
+                }
+            });
+        });
+    });
+    </script>
+
 @endsection

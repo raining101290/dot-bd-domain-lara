@@ -16,26 +16,7 @@
 
             <div class="container-fluid">
                 <div class="layout-specing">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div>
-                            <h6 class="text-muted mb-1">Welcome back, User!</h6>
-                            <h5 class="mb-0">
-                                @if(request()->routeIs('customer.dashboard'))
-                                    Dashboard
-                                @elseif(request()->routeIs('customer.domains'))
-                                    My Domains
-                                @elseif(request()->routeIs('customer.billing'))
-                                    Billing & Invoices
-                                @elseif(request()->routeIs('customer.profile'))
-                                    My Profile
-                                @elseif(request()->routeIs('customer.support'))
-                                    Support
-                                @else
-                                    Page
-                                @endif
-                            </h5>
-                        </div>
-                    </div>
+                    @include('customer.common.pagetitle')
                     <div class="row row-cols-xl-4 row-cols-md-2 row-cols-1">
                         <div class="col mt-4">
                             <a href="/customer/domains"
@@ -47,7 +28,7 @@
                                     <div class="flex-1 ms-3">
                                         <h6 class="mb-0 text-muted">Total Domains</h6>
                                         <p class="fs-5 text-dark fw-bold mb-0">
-                                            <span class="counter-value" data-target="5">0</span>
+                                            <span id="totalDomains" class="counter-value" data-target="0">0</span>
                                         </p>
                                     </div>
                                 </div>
@@ -64,7 +45,7 @@
                                     <div class="flex-1 ms-3">
                                         <h6 class="mb-0 text-muted">Active Domains</h6>
                                         <p class="fs-5 text-dark fw-bold mb-0">
-                                            <span class="counter-value" data-target="5">0</span>
+                                            <span id="activeDomains" class="counter-value" data-target="0">0</span>
                                         </p>
                                     </div>
                                 </div>
@@ -81,7 +62,7 @@
                                     <div class="flex-1 ms-3">
                                         <h6 class="mb-0 text-muted">Unpaid Invoices</h6>
                                         <p class="fs-5 text-dark fw-bold mb-0">
-                                            <span class="counter-value" data-target="5">0</span>
+                                            <span id="unpaidInvoices" class="counter-value" data-target="0">0</span>
                                         </p>
                                     </div>
                                 </div>
@@ -98,7 +79,7 @@
                                     <div class="flex-1 ms-3">
                                         <h6 class="mb-0 text-muted">Amount Due</h6>
                                         <p class="fs-5 text-dark fw-bold mb-0">
-                                            <span>৳2000</span>
+                                            <span id="amountDue">৳0</span>
                                         </p>
                                     </div>
                                 </div>
@@ -169,16 +150,43 @@
                                 </div>
 
                                 <div class="card-body pt-0">
-                                    <div class="text-center py-5">
+                                    <!-- Empty State (default visible) -->
+                                    <div id="emptyState" class="text-center py-5">
                                         <i class="uil uil-globe text-secondary mb-3" style="font-size:48px;"></i>
                                         <p class="text-muted small mb-1">You don't have any domains yet.</p>
                                         <p class="text-muted small mb-3">Start by registering your first domain</p>
 
-                                        <button class="btn btn-primary btn-sm d-inline-flex align-items-center">
+                                        <a href="/order/domain" class="btn btn-primary btn-sm d-inline-flex align-items-center">
                                             <i class="uil uil-plus fs-6 me-2"></i>
                                             Register Your First Domain
-                                        </button>
+                                        </a>
                                     </div>
+
+                                    <!-- Domain Table (hidden by default) -->
+                                    <div id="domainTableWrapper" class="table-responsive d-none">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>Domain</th>
+                                                    <th>Years</th>
+                                                    <th>Amount</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="orderTableBody"></tbody>
+                                        </table>
+                                    </div>
+                                    {{-- <div class="text-center py-5">
+                                        <i class="uil uil-globe text-secondary mb-3" style="font-size:48px;"></i>
+                                        <p class="text-muted small mb-1">You don't have any domains yet.</p>
+                                        <p class="text-muted small mb-3">Start by registering your first domain</p>
+
+                                        <a href="/order/domain" class="btn btn-primary btn-sm d-inline-flex align-items-center">
+                                            <i class="uil uil-plus fs-6 me-2"></i>
+                                            Register Your First Domain
+                                        </a>
+                                    </div> --}}
                                 </div>
                             </div>
                         </div>
@@ -212,4 +220,66 @@
             @include('customer.common.copyright')
         </main>
     </div>
+    <script>
+    $(document).ready(function () {
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+            return;
+        }
+
+        $.ajax({
+            url: "http://127.0.0.1:8001/api/domain-orders",
+            type: "GET",
+            headers: {
+                "Authorization": "Bearer " + token,
+                "Accept": "application/json"
+            },
+            success: function (response) {
+                const orders = response.data.data;
+
+                // Set counts
+                const totalDomains = orders.length;
+                const activeDomains = orders.filter(o => o.status === "active").length;
+                const unpaidInvoices = orders.filter(o => o.status === "pending").length;
+                const amountDue = orders
+                    .filter(o => o.status === "pending")
+                    .reduce((sum, o) => sum + parseFloat(o.amount), 0);
+
+                // Update UI
+                $("#totalDomains").attr("data-target", totalDomains).text(totalDomains);
+                $("#activeDomains").attr("data-target", activeDomains).text(activeDomains);
+                $("#unpaidInvoices").attr("data-target", unpaidInvoices).text(unpaidInvoices);
+                $("#amountDue").text("৳" + amountDue.toFixed(2));
+
+                if (orders.length > 0) {
+                    $("#emptyState").hide();
+                    $("#domainTableWrapper").removeClass("d-none");
+
+                    let html = "";
+                    orders.forEach(order => {
+                        html += `
+                        <tr>
+                            <td>${order.id}</td>
+                            <td>${order.domain_name}</td>
+                            <td>${order.years} Year(s)</td>
+                            <td>${order.amount}</td>
+                            <td><span class="badge bg-primary">${order.status}</span></td>
+                        </tr>`;
+                    });
+
+                    $("#orderTableBody").html(html);
+                } else {
+                    // No data → show empty design
+                    $("#domainTableWrapper").addClass("d-none");
+                    $("#emptyState").show();
+                }
+            },
+            error: function (xhr) {
+                console.error(xhr.responseJSON);
+                alert("Failed to load orders");
+            }
+        });
+    });
+    </script>
 @endsection

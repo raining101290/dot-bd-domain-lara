@@ -39,7 +39,7 @@
                     @endif
                     <div class="card shadow rounded border-0">
                         <div class="card-body">
-                            <form method="POST" action="{{ route('customer.register') }}" id="form-individual">
+                            <form method="POST" id="form-register">
                                 @csrf
                                 <div class="row">
                                     <div class="col-md-12 mb-20 form-heading">
@@ -412,15 +412,30 @@
             </div>
         </div> 
     </section>
-    {{-- <script type="text/javascript">
-        $("#form-individual").on("submit", function (e) {
+    <script type="text/javascript">
+        function showAlert(message, type = "success") {
+            $("#alertBox").html(`
+                <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            `);
+
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if ($('.alert').length) {
+                    $('.alert').alert('close');
+                }
+            }, 5000);
+        }
+        $("#form-register").on("submit", function (e) {
             e.preventDefault();
 
             let formData = {
                 full_name: $("#name").val(),
                 email: $("#email").val(),
                 password: $("#password").val(),
-                confirm_password: $("#cpassword").val(),
+                password_confirmation: $("#cpassword").val(),
                 mobile: $("#mobile").val(),
                 company: $("#company").val(),
                 nid: $("#NID").val(),
@@ -432,7 +447,7 @@
             };
 
             $.ajax({
-                url: "http://127.0.0.1:8001/api/customers",
+                url: "http://127.0.0.1:8001/api/customer/auth/register",
                 type: "POST",
                 contentType: "application/json",
                 data: JSON.stringify(formData),
@@ -443,11 +458,14 @@
 
                 success: function (res) {
                     if (res.success) {
-                        alert("✅ " + res.message);
-                        $("#form-individual")[0].reset();
+                        showAlert("success", res.message);
+                        $("#form-register")[0].reset();
                     } else {
-                        alert("❌ " + res.message);
+                        showAlert("danger", res.message);
                     }
+                    setTimeout(() => {
+                        window.location.href = "/customer/login";
+                    }, 2000);
                 },
 
                 error: function (xhr) {
@@ -455,14 +473,14 @@
                         let res = xhr.responseJSON;
 
                         if (res.errors) {
-                            // ✅ Show first validation error dynamically
+                            // Show first validation error dynamically
                             let firstError = Object.values(res.errors)[0][0];
-                            alert("❌ " + firstError);
+                            showAlert("danger", firstError);
                         } else {
-                            alert("❌ " + res.message);
+                            showAlert("danger", res.message);
                         }
                     } else {
-                        alert("❌ Something went wrong!");
+                        showAlert("danger", "Something went wrong!");
                     }
                 },
 
@@ -472,5 +490,5 @@
             });
 
         });
-    </script> --}}
+    </script>
 @endsection

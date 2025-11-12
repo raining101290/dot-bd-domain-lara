@@ -4,6 +4,8 @@
         <section class="py-50 d-table w-100">
             <div class="container">
                 <div class="row justify-content-center">
+                    <div id="alertBox" class="position-fixed right-2 z-50">
+                    </div>
                     <div class="col-12 text-center">
                         <div class="section-title mb-4 pb-2">
                             <span class="badge rounded-pill bg-soft-success"><i class="uil uil-globe text-success"></i> Secure Your Online Identity</span>
@@ -31,9 +33,9 @@
 
                                         <div class="input-group-append">
                                             <select class="form-control form-control-lg rounded-0" name="extension" id="extension">
-                                                @foreach ($domains as $domain)
+                                                {{-- @foreach ($domains as $domain)
                                                     <option value="{{ $domain->name }}">{{ $domain->name }}</option>
-                                                @endforeach
+                                                @endforeach --}}
                                             </select>
                                         </div>
 
@@ -45,7 +47,7 @@
                         <div id="resultAlert"></div>
                     </div>
                 </div>
-                <div class="row pt-3 mt-100">
+                <div class="row pt-3 mt-100 mb-100">
                     <div class="col-12 col-md-8 register-domain-section" style="display: none">
                         <div class="pages-heading">
                             <h1 class="text-white card-heading"> Register your Domain </h1>
@@ -85,8 +87,6 @@
                                             <label for="tld_price" class="form-label text-muted">Registration Period </label>
                                             <select id="tld_price" name="tld_price" class="form-select form-control"
                                                 required>
-                                                <option selected value="id">1 year - ৳1100</option>
-                                                <option value="id">1 year - ৳1100</option>
                                             </select>
                                         </div>
                                     </div>
@@ -232,12 +232,27 @@
                                                 </div>
                                                 <div class="col-md-12">
                                                     <div class="mb-3">
-                                                        <label for="address" class="form-label text-muted">Address <span
-                                                                class="text-danger">*</span></label>
+                                                        <label for="address" class="form-label text-muted">Address 
+                                                            <span class="text-danger">*</span>
+                                                        </label>
                                                         <div class="position-relative">
-                                                            <input id="address" type="text" class="form-control"
-                                                                placeholder="Address" name="address" required
-                                                                autocomplete="on" />
+                                                            <input id="address" type="text" class="form-control" placeholder="Address" name="address" required autocomplete="on" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 password-field">
+                                                    <div class="mb-3">
+                                                        <label for="rpassword"  class="form-label text-muted">Password <span class="text-danger">*</span></label>
+                                                        <div class="position-relative">
+                                                            <input id="rpassword" type="password" class="form-control" placeholder="Password" name="rpassword" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 password-field">
+                                                    <div class="mb-3">
+                                                        <label for="rcpassword" class="form-label text-muted">Confirm Password <span class="text-danger">*</span></label>
+                                                        <div class="position-relative">
+                                                            <input id="rcpassword" type="password" class="form-control" placeholder="Confirm Password" name="rcpassword" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -338,7 +353,7 @@
                                         </div>
                                     </div>
 
-                                    <button disabled type="submit" class="btn btn-block btn-success mt-3"> Proceed to
+                                    <button disabled type="button" id="btn-order" class="btn btn-block btn-success mt-3"> Order and Proceed to
                                         Payment </button>
                                 </div>
                             </div>
@@ -422,42 +437,73 @@
     
     <script type="text/javascript">
         $(document).ready(function () {
-            function getPricing(){
+            const apiURL = "http://127.0.0.1:8001/api/domains";
+            let domainTlds = [];
+            $.get(apiURL, function (res) {
+                if (!res.success) return console.error("API Error");
+                domainTlds = res.data; // store for later use
+                const activeTlds = res.data.filter(t => t.status === "active");
+                let options = ``;
+                let cards = ``;
+
+                activeTlds.forEach(tld => {
+                    options += `<option value="${tld.name}">${tld.name}</option>`;
+                });
+
+                domainTlds.forEach(tld => {
+                    const oneYear = tld.prices.find(p => p.years === 1);
+                    const renewalPrice = oneYear ? `Renewal ${oneYear.renewal_price}/year` : "Renewal price not found";
+
+                    const statusBadge = tld.status === "active"
+                        ? ``
+                        : `<span class="badge bg-secondary">Commingsoon</span>`;
+
+                    cards += `
+                    <div class="col-12 col-md-6 col-lg-3 mb-8">
+                        <div class="card-wrapper">
+                            <div class="back-card"></div>
+                            <div class="top-card">
+                                <div class="card-content">
+                                    <div class="text-end mb-2">${statusBadge}</div>
+                                    <h2 class="fw-semibold text-primary text-center">${tld.name.toUpperCase()}</h2>
+                                    <h3 class="fw-semibold text-secondary text-center fs-5">${tld.prices[0].register_price}/1st year</h3>
+                                    <ul class="list-unstyled text-muted">
+                                        <li class="mb-1"><span class="text-primary h5 me-2"><i class="uil uil-check-circle"></i></span>Perfect for businesses</li>
+                                        <li class="mb-1"><span class="text-primary h5 me-2"><i class="uil uil-check-circle"></i></span>Instant activation</li>
+                                        <li class="mb-1"><span class="text-primary h5 me-2"><i class="uil uil-check-circle"></i></span>Free DNS management</li>
+                                        <li class="mb-1"><span class="text-primary h5 me-2"><i class="uil uil-check-circle"></i></span>Email forwarding</li>
+                                        <li class="mb-1"><span class="text-primary h5 me-2"><i class="uil uil-check-circle"></i></span>24/7 support</li>
+                                        <li class="mb-1"><span class="text-primary h5 me-2"><i class="uil uil-check-circle"></i></span>${renewalPrice}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+                });
+
+                $("#extension").html(options); // only active TLDs
+                $("#domainCardsContainer").html(cards); // all TLDs
+            });
+            function getPricing() {
                 const name = $("#name").val().trim();
                 const ext = $("#extension").val();
-                const domain = name + ext;
-                if (!domain) return;
+                if (!name || !ext) return;
 
-                const tld = domain.substring(domain.indexOf('.'));
+                const tldData = domainTlds.find(t => t.name === ext);
+                if (!tldData) return console.warn("TLD not found");
 
-                $.ajax({
-                    url: "http://127.0.0.1:8001/api/domains",
-                    method: "GET",
-                    success: function (res) {
-                        if (!res.success) return;
-
-                        const domainData = res.data.find(item => item.name === tld);
-                        if (!domainData) return console.warn("TLD not found");
-
-                        let options = ``;
-                        domainData.prices.forEach(p => {
-                            const selected = p.years === 1 ? "selected" : "";
-                            options += `<option value="${p.id}" ${selected}>
-                                ${p.years} year${p.years > 1 ? 's' : ''} - ৳${p.register_price}
-                            </option>`;
-                        });
-
-                        $("#tld_price").html(options);
-                        $("#tld_price").trigger("change");
-                    },
-                    error: function (err) {
-                        console.error("API Error:", err);
-                    }
+                let options = ``;
+                tldData.prices.forEach(p => {
+                    const selected = p.years === 1 ? "selected" : "";
+                    options += `<option value="${p.id}" ${selected}>
+                        ${p.years} year${p.years > 1 ? 's' : ''} - ৳${p.register_price}
+                    </option>`;
                 });
+
+                $("#tld_price").html(options);
+                $("#tld_price").trigger("change");
             }
             
-            const token = localStorage.getItem("token");
-            const savedUser = localStorage.getItem("user");
             // Show clear button when typing or after search
             $('#name').on('input', function () {
                 $('#clearSearch').toggle($(this).val().length > 0);
@@ -579,56 +625,6 @@
                 var customer = $('#customer_type').val();
                 $('.label_customer_type').text(customer);
             });
-
-            const apiURL = "http://127.0.0.1:8001/api/domains";
-
-            $.get(apiURL, function (res) {
-                if (!res.success) return console.error("API Error");
-
-                const allTlds = res.data;
-                const activeTlds = res.data.filter(t => t.status === "active");
-
-                let options = ``;
-                let cards = ``;
-
-                activeTlds.forEach(tld => {
-                    options += `<option value="${tld.name}">${tld.name}</option>`;
-                });
-
-                allTlds.forEach(tld => {
-                    const oneYear = tld.prices.find(p => p.years === 1);
-                    const renewalPrice = oneYear ? `Renewal ${oneYear.renewal_price}/year` : "Renewal price not found";
-
-                    const statusBadge = tld.status === "active"
-                        ? ``
-                        : `<span class="badge bg-secondary">Commingsoon</span>`;
-
-                    cards += `
-                    <div class="col-12 col-md-6 col-lg-3 mb-8">
-                        <div class="card-wrapper">
-                            <div class="back-card"></div>
-                            <div class="top-card">
-                                <div class="card-content">
-                                    <div class="text-end mb-2">${statusBadge}</div>
-                                    <h2 class="fw-semibold text-primary text-center">${tld.name.toUpperCase()}</h2>
-                                    <h3 class="fw-semibold text-secondary text-center fs-5">${tld.prices[0].register_price}/1st year</h3>
-                                    <ul class="list-unstyled text-muted">
-                                        <li class="mb-1"><span class="text-primary h5 me-2"><i class="uil uil-check-circle"></i></span>Perfect for businesses</li>
-                                        <li class="mb-1"><span class="text-primary h5 me-2"><i class="uil uil-check-circle"></i></span>Instant activation</li>
-                                        <li class="mb-1"><span class="text-primary h5 me-2"><i class="uil uil-check-circle"></i></span>Free DNS management</li>
-                                        <li class="mb-1"><span class="text-primary h5 me-2"><i class="uil uil-check-circle"></i></span>Email forwarding</li>
-                                        <li class="mb-1"><span class="text-primary h5 me-2"><i class="uil uil-check-circle"></i></span>24/7 support</li>
-                                        <li class="mb-1"><span class="text-primary h5 me-2"><i class="uil uil-check-circle"></i></span>${renewalPrice}</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>`;
-                });
-
-                $("#extension").html(options); // only active TLDs
-                $("#domainCardsContainer").html(cards); // all TLDs
-            });
         
             function fillUserData() {
                 if (!window.userProfile) return;
@@ -645,6 +641,16 @@
             
             function checkToken(){
                 const token = localStorage.getItem("token");
+                const savedUser = localStorage.getItem("user");
+                if (token) {
+                    $(".auth-links").html(`
+                        <li class="list-inline-item mb-0">
+                            <a href="/customer/dashboard">
+                                <div class="btn btn-success btn-sm"> Dashboard</div>
+                            </a>
+                        </li>
+                    `);
+                }
                 if (token) {
                     $("#authSection").hide();
                     $("#registrantSection").show();
@@ -652,6 +658,7 @@
                     $('#registrantLoginSection, #registrantForm').show();
                     $('#loginForm').hide();
                     if (token && savedUser) {
+                        $('.password-field').hide();
                         window.userProfile = JSON.parse(savedUser);
                         if (typeof fillUserData === "function") {
                             fillUserData();
@@ -661,6 +668,7 @@
                     $("#authSection").show();
                     $('#registrantLoginSection').show();
                     $("#registrantSection").hide();
+                    $('.password-field').show();
                 }
             }
             checkToken();
@@ -688,7 +696,7 @@
                 let password = $('#password').val();
 
                 $.ajax({
-                    url: "http://127.0.0.1:8001/api/customer/login",
+                    url: "http://127.0.0.1:8001/api/customer/auth/login",
                     type: "POST",
                     dataType: "json",
                     contentType: "application/json",
@@ -699,13 +707,13 @@
                     success: function (response) {
                         if (response?.success) {
                             window.userProfile = response.user;
-                            if (typeof fillUserData === "function") {
-                                fillUserData();
-                            }
                             // ✅ Store token
                             localStorage.setItem("token", response.token);
                             localStorage.setItem("user", JSON.stringify(response.user));
 
+                            if (typeof fillUserData === "function") {
+                                fillUserData();
+                            }
                             // ✅ Success banner
                             $('#loginAlert').html(`
                                 <div class="alert alert-success" id="loginSuccessAlert">Login successful! </div>
@@ -733,6 +741,158 @@
                     }
                 });
             });
+            $("#registrant").on("change", function () {
+                const val = $(this).val();
+                if (val == "0") {
+                    // Use My Profile Info
+                    $('.password-field').hide();
+                } 
+                else if (val == "1") {
+                    // Create New
+                    $('.password-field').show();
+                }
+            });
+            $("#btn-order").click(function () {
+                let tempCustomer = localStorage.getItem("temp_customer_id");
+                let token = localStorage.getItem("token");
+                let storedUser = JSON.parse(localStorage.getItem("user"));
+                let isLoggedIn = token && storedUser;
+
+                const text = $("#tld_price option:selected").text().trim();
+                const year = text.split(" ")[0];
+
+                let domainPayload = new FormData();
+                domainPayload.append("domain_name", $(".selectedDomain").first().text().trim());
+                domainPayload.append("years", year);
+                domainPayload.append("customer_type", $("#customer_type").val().toLowerCase());
+
+                if ($("#nid_file")[0].files.length > 0) domainPayload.append("nid_file", $("#nid_file")[0].files[0]);
+                if ($("#trade_license")[0].files.length > 0) domainPayload.append("trade_license", $("#trade_license")[0].files[0]);
+                if ($("#auth_letter")[0].files.length > 0) domainPayload.append("auth_letter", $("#auth_letter")[0].files[0]);
+                if ($("#other_doc")[0].files.length > 0) domainPayload.append("other_doc", $("#other_doc")[0].files[0]);
+
+                // Logged in user → direct order
+                if (isLoggedIn) {
+                    if($('#registrant').val() == '1'){
+                        registerUser(domainPayload);
+                        return;
+                    }else{
+                        domainPayload.append("customer_id", storedUser.id);
+                        placeDomainOrder(domainPayload, token);
+                        return;
+                    }
+                }
+
+                // Not logged in, but already registered earlier → reuse ID
+                if (tempCustomer) {
+                    domainPayload.append("customer_id", tempCustomer);
+                    placeDomainOrder(domainPayload);
+                    return;
+                }
+
+                // Need registration → register then order
+                if ($("#registrantForm").is(":visible")) {
+                    registerUser(domainPayload);
+                } else {
+                    showAlert("danger", "Please login or register first!");
+                }
+            });
+
+            function registerUser(domainPayload) {
+                let registerData = {
+                    full_name: $("#fullname").val(),
+                    email: $("#email").val(),
+                    password: $("#rpassword").val(),
+                    password_confirmation: $("#rcpassword").val(),
+                    mobile: $("#mobile").val(),
+                    company: $("#company").val(),
+                    nid: $("#NID").val(),
+                    address: $("#address").val(),
+                    city: $("#city").val(),
+                    state: $("#state").val(),
+                    postal_code: $("#post").val(),
+                    country: "Bangladesh"
+                };
+                $.ajax({
+                    url: "http://127.0.0.1:8001/api/customer/auth/register",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(registerData),
+                    success: function (res) {
+                        const customerId = res?.data?.id;
+                        localStorage.setItem("temp_customer_id", customerId);
+                        showAlert("Registration successful!", "success");
+                        domainPayload.append("customer_id", res.data.id);
+                        placeDomainOrder(domainPayload);
+                    },
+                    error: function (xhr) {
+                        let message = "Failed to create customer";
+                        if (xhr?.responseJSON) {
+                            if (xhr.responseJSON.message) {
+                                message = xhr.responseJSON.message;
+                            }
+                            if (xhr.responseJSON.errors) {
+                                // Get the first validation error message
+                                const firstKey = Object.keys(xhr.responseJSON.errors)[0];
+                                message = xhr.responseJSON.errors[firstKey][0];
+                            }
+                        }
+                        showAlert(message, "danger");
+                    }
+                });
+            }
+            function placeDomainOrder(domainPayload, token = null) {
+                $.ajax({
+                    url: "http://127.0.0.1:8001/api/domain-orders",
+                    type: "POST",
+                    data: domainPayload,
+                    processData: false,
+                    contentType: false,
+                    headers: token ? { "Authorization": "Bearer " + token } : {},
+
+                    success: function () {
+                        showAlert("Domain order placed successfully!", "success");
+                        localStorage.removeItem("temp_customer_id");
+                        resetAllForms();
+                    },
+                    error: function (xhr) {
+                        let message = "Failed to place Domain order";
+                        if (xhr?.responseJSON) {
+                            if (xhr.responseJSON.message) {
+                                message = xhr.responseJSON.message;
+                            }
+                            if (xhr.responseJSON.errors) {
+                                // Get the first validation error message
+                                const firstKey = Object.keys(xhr.responseJSON.errors)[0];
+                                message = xhr.responseJSON.errors[firstKey][0];
+                            }
+                        }
+                        showAlert(message,"danger");
+                        resetAllForms();
+                    }
+                });
+            }
+
+            function resetAllForms() {
+                document.getElementById("domainSearchForm")?.reset();
+                document.getElementById("registrantForm")?.reset();
+                document.getElementById("loginForm")?.reset();
+            }
+            function showAlert(message, type = "success") {
+                $("#alertBox").html(`
+                    <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                        ${message}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                `);
+
+                // Auto remove after 5 seconds
+                setTimeout(() => {
+                    if ($('.alert').length) {
+                        $('.alert').alert('close');
+                    }
+                }, 5000);
+            }
         });
     </script>
 @endsection

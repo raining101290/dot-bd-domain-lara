@@ -73,7 +73,7 @@
                 let password = $('#password').val();
 
                 $.ajax({
-                    url: "http://127.0.0.1:8001/api/customer/login",
+                    url: "http://127.0.0.1:8001/api/customer/auth/login",
                     type: "POST",
                     dataType: "json",
                     contentType: "application/json",
@@ -93,9 +93,9 @@
                             `);
 
                             // ✅ Redirect after delay
-                            // setTimeout(() => {
-                            //     window.location.href = "/customer/dashboard";
-                            // }, 1000);
+                            setTimeout(() => {
+                                window.location.href = "/customer/dashboard";
+                            }, 1000);
                         }
                     },
                     error: function (xhr) {

@@ -17,26 +17,7 @@
 
             <div class="container-fluid">
                 <div class="layout-specing">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div>
-                            <h6 class="text-muted mb-1">Welcome back, User!</h6>
-                            <h5 class="mb-0">
-                                @if(request()->routeIs('customer.dashboard'))
-                                    Dashboard
-                                @elseif(request()->routeIs('customer.domains'))
-                                    My Domains
-                                @elseif(request()->routeIs('customer.billing'))
-                                    Billing & Invoices
-                                @elseif(request()->routeIs('customer.profile'))
-                                    My Profile
-                                @elseif(request()->routeIs('customer.support'))
-                                    Support
-                                @else
-                                    Page
-                                @endif
-                            </h5>
-                        </div>
-                    </div>
+                    @include('customer.common.pagetitle')
                     <div class="row row-cols-xl-4 row-cols-md-2 row-cols-1">
                         <div class="col mt-4">
                             <a href="#!"

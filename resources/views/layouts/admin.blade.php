@@ -19,7 +19,7 @@
             let token = localStorage.getItem("token");
 
             $.ajax({
-                url: "http://127.0.0.1:8001/api/customer/logout",
+                url: "http://127.0.0.1:8001/api/customer/auth/logout",
                 type: "POST",
                 headers: {
                     "Authorization": "Bearer " + token

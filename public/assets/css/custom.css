@@ -273,3 +273,6 @@ hr {
     color: #888888;
     opacity: 1;
 }
+.z-50{
+    z-index: 50;
+}
