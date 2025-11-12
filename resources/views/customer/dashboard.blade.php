@@ -227,9 +227,8 @@
         if (!token) {
             return;
         }
-
         $.ajax({
-            url: "http://127.0.0.1:8001/api/domain-orders",
+            url: window.API_BASE_URL + "/domain-orders",
             type: "GET",
             headers: {
                 "Authorization": "Bearer " + token,

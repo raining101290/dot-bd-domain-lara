@@ -10,19 +10,43 @@
             $(".fullname").text(user.full_name || "");
         }
     });
-    $(document).ajaxError(function (event, xhr) {
-        if (xhr.status === 401 || xhr.responseJSON?.message?.toLowerCase().includes("token required")) {
+    $(document).ajaxError(async function (event, xhr, settings) {
+        const errMsg = xhr.responseJSON?.message?.toLowerCase() || "";
+        if (xhr.status === 401 || errMsg.includes("token required") || errMsg.includes("unauthorized")) {
+            const oldToken = localStorage.getItem("token");
+            if (!oldToken) return logout();
+            try {
+                const refreshRes = await $.ajax({
+                    url:  window.API_BASE_URL + "/customer/auth/refresh",
+                    type: "POST",
+                    headers: {
+                        "Authorization": "Bearer " + oldToken,
+                        "Accept": "application/json"
+                    }
+                });
 
-            // Clear stored auth data
-            localStorage.removeItem("token");
-            localStorage.removeItem("customer_id");
-            localStorage.removeItem("user");
+                if (refreshRes.success && refreshRes.token) {
+                    console.log("Token refreshed!");
+                    localStorage.setItem("token", refreshRes.token);
+                    settings.headers = settings.headers || {};
+                    settings.headers["Authorization"] = "Bearer " + refreshRes.token;
+                    $.ajax(settings);
+                } else {
+                    logout();
+                }
 
-            // Optional: Save message to show after redirect
-            sessionStorage.setItem("auth_error", "Session expired. Please login again.");
-
-            // Redirect to login page
-            window.location.href = "/customer/login";
+            } catch (refreshError) {
+                console.log("Refresh token failed");
+                logout();
+            }
         }
     });
+
+    function logout() {
+        localStorage.removeItem("token");
+        localStorage.removeItem("customer_id");
+        localStorage.removeItem("user");
+        sessionStorage.setItem("auth_error", "Session expired. Please login again.");
+        window.location.href = "/customer/login";
+    }
 </script>

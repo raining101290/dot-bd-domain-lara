@@ -437,7 +437,7 @@
     
     <script type="text/javascript">
         $(document).ready(function () {
-            const apiURL = "http://127.0.0.1:8001/api/domains";
+            const apiURL =  window.API_BASE_URL + "/domains";
             let domainTlds = [];
             $.get(apiURL, function (res) {
                 if (!res.success) return console.error("API Error");
@@ -696,7 +696,7 @@
                 let password = $('#password').val();
 
                 $.ajax({
-                    url: "http://127.0.0.1:8001/api/customer/auth/login",
+                    url: window.API_BASE_URL + "/customer/auth/login",
                     type: "POST",
                     dataType: "json",
                     contentType: "application/json",
@@ -814,7 +814,7 @@
                     country: "Bangladesh"
                 };
                 $.ajax({
-                    url: "http://127.0.0.1:8001/api/customer/auth/register",
+                    url:  window.API_BASE_URL + "/customer/auth/register",
                     type: "POST",
                     contentType: "application/json",
                     data: JSON.stringify(registerData),
@@ -844,7 +844,7 @@
             }
             function placeDomainOrder(domainPayload, token = null) {
                 $.ajax({
-                    url: "http://127.0.0.1:8001/api/domain-orders",
+                    url:  window.API_BASE_URL + "/domain-orders",
                     type: "POST",
                     data: domainPayload,
                     processData: false,

@@ -447,7 +447,7 @@
             };
 
             $.ajax({
-                url: "http://127.0.0.1:8001/api/customer/auth/register",
+                url:  window.API_BASE_URL + "/customer/auth/register",
                 type: "POST",
                 contentType: "application/json",
                 data: JSON.stringify(formData),

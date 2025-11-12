@@ -34,5 +34,8 @@
     <link href="/backend/assets/libs/@iconscout/unicons/css/line.css" type="text/css" rel="stylesheet" />
     <link href="/backend/assets/css/style.min.css" rel="stylesheet" type="text/css" />
     <link href="/backend/assets/css/custom.css" rel="stylesheet" type="text/css" />
+    <script>
+        window.API_BASE_URL = "{{ config('app.api_url') }}";
+    </script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>

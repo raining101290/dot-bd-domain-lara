@@ -73,7 +73,7 @@
                 let password = $('#password').val();
 
                 $.ajax({
-                    url: "http://127.0.0.1:8001/api/customer/auth/login",
+                    url:  window.API_BASE_URL + "/customer/auth/login",
                     type: "POST",
                     dataType: "json",
                     contentType: "application/json",

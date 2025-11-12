@@ -225,7 +225,7 @@
 
         function fetchOrders(page = 1) {
             $.ajax({
-                url: `http://127.0.0.1:8001/api/domain-orders?page=${page}`,
+                url: window.API_BASE_URL + `/domain-orders?page=${page}`,
                 type: "GET",
                 headers: {
                     "Authorization": "Bearer " + token,
