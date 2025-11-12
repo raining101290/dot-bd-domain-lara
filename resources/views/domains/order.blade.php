@@ -880,7 +880,7 @@
             }
             function showAlert(message, type = "success") {
                 $("#alertBox").html(`
-                    <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                    <div class="alert notifications alert-${type} alert-dismissible fade show" role="alert">
                         ${message}
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
@@ -888,8 +888,8 @@
 
                 // Auto remove after 5 seconds
                 setTimeout(() => {
-                    if ($('.alert').length) {
-                        $('.alert').alert('close');
+                    if ($('.notifications').length) {
+                        $('.notifications').alert('close');
                     }
                 }, 5000);
             }
