@@ -177,16 +177,6 @@
                                             <tbody id="orderTableBody"></tbody>
                                         </table>
                                     </div>
-                                    {{-- <div class="text-center py-5">
-                                        <i class="uil uil-globe text-secondary mb-3" style="font-size:48px;"></i>
-                                        <p class="text-muted small mb-1">You don't have any domains yet.</p>
-                                        <p class="text-muted small mb-3">Start by registering your first domain</p>
-
-                                        <a href="/order/domain" class="btn btn-primary btn-sm d-inline-flex align-items-center">
-                                            <i class="uil uil-plus fs-6 me-2"></i>
-                                            Register Your First Domain
-                                        </a>
-                                    </div> --}}
                                 </div>
                             </div>
                         </div>
@@ -197,18 +187,33 @@
                                         <h5 class="mb-1">Recent Invoices</h5>
                                         <p class="text-muted small mb-0">Your latest invoices and transactions</p>
                                     </div>
-
                                     <a href="/customer/billing" class="btn btn-light btn-sm d-flex align-items-center">
                                         View All
                                         <i class="uil uil-arrow-up-right ms-1"></i>
                                     </a>
                                 </div>
-                                <div class="card-body pt-0">
-                                    <div class="text-center py-5">
-                                        <i class="uil uil-chart-line text-secondary mb-3" style="font-size:48px;"></i>
 
+                                <div class="card-body pt-0">
+                                    <!-- Empty state -->
+                                    <div id="noInvoices" class="text-center py-5">
+                                        <i class="uil uil-chart-line text-secondary mb-3" style="font-size:48px;"></i>
                                         <p class="text-muted mb-1">No recent activity</p>
                                         <p class="text-muted small mb-3">Your invoices will appear here</p>
+                                    </div>
+
+                                    <!-- Table -->
+                                    <div id="invoiceTableWrapper" class="table-responsive d-none">
+                                        <table class="table table-bordered table-sm align-middle mb-0">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th>Invoice No</th>
+                                                    <th>Amount</th>
+                                                    <th>Status</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="invoiceTableBody"></tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
@@ -228,7 +233,7 @@
             return;
         }
         $.ajax({
-            url: window.API_BASE_URL + "/domain-orders",
+            url: window.API_BASE_URL + "/domain-orders?limit=5",
             type: "GET",
             headers: {
                 "Authorization": "Bearer " + token,
@@ -238,7 +243,7 @@
                 const orders = response.data.data;
 
                 // Set counts
-                const totalDomains = orders.length;
+                const totalDomains = response.data.total;
                 const activeDomains = orders.filter(o => o.status === "active").length;
                 const unpaidInvoices = orders.filter(o => o.status === "pending").length;
                 const amountDue = orders
@@ -280,5 +285,150 @@
             }
         });
     });
+    </script>
+    <script>
+        $(document).ready(function() {
+            const token = localStorage.getItem("token");
+            if (!token) return; // no token → skip
+
+            function getInvoiceArray(response) {
+                // response.data may be:
+                // 1) an array (older/unusual API)
+                // 2) a pagination object { data: [...], current_page: ..., ... }
+                // 3) an object (single invoice) — handle defensively
+                const payload = response.data;
+
+                if (!payload) return [];
+
+                if (Array.isArray(payload)) {
+                    return payload;
+                }
+
+                if (payload.data && Array.isArray(payload.data)) {
+                    return payload.data;
+                }
+
+                // fallback: if payload itself looks like an invoice object, return single-item array
+                if (typeof payload === 'object') {
+                    // If it has invoice_no or id assume single invoice object
+                    if (payload.id || payload.invoice_no) return [payload];
+                }
+
+                return [];
+            }
+
+            function formatDate(isoStr) {
+                try {
+                    return new Date(isoStr).toLocaleDateString();
+                } catch (e) {
+                    return isoStr || '';
+                }
+            }
+
+            // Fetch invoices
+            $.ajax({
+                url: `${window.API_BASE_URL}/my-invoices`,
+                type: "GET",
+                headers: {
+                    "Authorization": "Bearer " + token,
+                    "Accept": "application/json"
+                },
+                success: function(response) {
+                    const invoices = getInvoiceArray(response);
+
+                    if (invoices.length === 0) {
+                        $("#invoiceTableWrapper").addClass("d-none");
+                        $("#noInvoices").removeClass("d-none");
+                        return;
+                    }
+
+                    $("#noInvoices").addClass("d-none");
+                    $("#invoiceTableWrapper").removeClass("d-none");
+
+                    // render only first 5
+                    const items = invoices.slice(0, 5);
+
+                    let html = "";
+                    items.forEach(inv => {
+                        const domain = inv.order?.domain_name || "N/A";
+                        const date = formatDate(inv.created_at || inv.updated_at);
+                        const status = (inv.status || '').toLowerCase();
+                        const statusBadge = status === "paid"
+                            ? "success"
+                            : (status === "unpaid" ? "warning" : "secondary");
+
+                        html += `
+                            <tr>
+                                <td>${inv.invoice_no || '—'}</td>
+                                <td>৳${parseFloat(inv.amount || 0).toFixed(2)}</td>
+                                <td><span class="badge bg-${statusBadge} text-uppercase">${(inv.status || '—')}</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary download-invoice-btn" data-id="${inv.id}">
+                                        <i class="uil uil-download-alt"></i> PDF
+                                    </button>
+                                </td>
+                            </tr>`;
+                    });
+
+                    $("#invoiceTableBody").html(html);
+                },
+                error: function(xhr) {
+                    console.error("Failed to load invoices:", xhr.responseText || xhr.responseJSON);
+                    $("#invoiceTableWrapper").addClass("d-none");
+                    $("#noInvoices").removeClass("d-none");
+                }
+            });
+
+            // Delegate click to handle download via AJAX (so we can send Authorization header)
+            $(document).on('click', '.download-invoice-btn', function () {
+                const id = $(this).data('id');
+                if (!id) return showAlert("Invalid invoice id", "danger");
+
+                const btn = $(this);
+                const originalHtml = btn.html();
+                btn.prop('disabled', true).html('Downloading...');
+
+                fetch(`${window.API_BASE_URL}/invoices/${id}/download`, {
+                    method: 'GET',
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        "Accept": "application/pdf"
+                    }
+                })
+                .then(async res => {
+                    if (!res.ok) {
+                        // try parse json error
+                        let errText = await res.text();
+                        try {
+                            const j = JSON.parse(errText);
+                            throw new Error(j.message || errText);
+                        } catch (e) {
+                            throw new Error(errText || 'Failed to download invoice');
+                        }
+                    }
+                    return res.blob();
+                })
+                .then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+
+                    // try to use invoice_no as filename, fallback to invoice-id
+                    const filename = `invoice-${id}.pdf`;
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    window.URL.revokeObjectURL(url);
+                })
+                .catch(err => {
+                    console.error(err);
+                    showAlert(err.message || "Failed to download invoice", "danger");
+                })
+                .finally(() => {
+                    btn.prop('disabled', false).html(originalHtml);
+                });
+            });
+        });
     </script>
 @endsection

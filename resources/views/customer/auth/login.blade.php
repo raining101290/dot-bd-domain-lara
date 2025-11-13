@@ -66,12 +66,13 @@
             if (localStorage.getItem("token")) {
                 window.location.href = "/customer/dashboard";
             }
+            
             $('#loginForm').submit(function (e) {
                 e.preventDefault();
 
                 let username = $('#username').val();
                 let password = $('#password').val();
-
+                
                 $.ajax({
                     url:  window.API_BASE_URL + "/customer/auth/login",
                     type: "POST",
