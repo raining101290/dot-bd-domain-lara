@@ -526,7 +526,7 @@
 
         // Fetch customer data from API and prefill form
         $.ajax({
-            url:  window.API_BASE_URL + `/customers/${customerId}`,
+            url:  window.API_BASE_URL + `/profile/${customerId}`,
             type: "GET",
             headers: {
                 "Authorization": "Bearer " + token,
@@ -566,7 +566,7 @@
             if (!isValidEmail(email)) return showAlert("Invalid email address", "danger");
 
             $.ajax({
-                url:  window.API_BASE_URL + `/customers/${customerId}/update-basic`,
+                url:  window.API_BASE_URL + `/profile/${customerId}/update-basic`,
                 type: "PATCH",
                 contentType: "application/json",
                 headers: {
@@ -602,7 +602,7 @@
             const country = $("#country").val().trim();
 
             $.ajax({
-                url:  window.API_BASE_URL + `/customers/${customerId}/update-info`,
+                url:  window.API_BASE_URL + `/profile/${customerId}/update-info`,
                 type: "PATCH",
                 contentType: "application/json",
                 headers: {
@@ -645,7 +645,7 @@
             const customerId = localStorage.getItem("customer_id");
 
             $.ajax({
-                url: window.API_BASE_URL + `/customers/${customerId}/update-password`,
+                url: window.API_BASE_URL + `/profile/${customerId}/update-password`,
                 type: "PATCH",
                 contentType: "application/json",
                 headers: {

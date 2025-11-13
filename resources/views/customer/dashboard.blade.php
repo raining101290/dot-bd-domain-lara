@@ -167,7 +167,7 @@
                                         <table class="table table-bordered">
                                             <thead>
                                                 <tr>
-                                                    <th>ID</th>
+                                                    <th>SL</th>
                                                     <th>Domain</th>
                                                     <th>Years</th>
                                                     <th>Amount</th>
@@ -203,9 +203,10 @@
 
                                     <!-- Table -->
                                     <div id="invoiceTableWrapper" class="table-responsive d-none">
-                                        <table class="table table-bordered table-sm align-middle mb-0">
-                                            <thead class="table-light">
+                                        <table class="table table-bordered">
+                                            <thead>
                                                 <tr>
+                                                    <th>SL</th>
                                                     <th>Invoice No</th>
                                                     <th>Amount</th>
                                                     <th>Status</th>
@@ -225,7 +226,7 @@
             @include('customer.common.copyright')
         </main>
     </div>
-    <script>
+    {{-- <script>
     $(document).ready(function () {
         const token = localStorage.getItem("token");
 
@@ -233,7 +234,7 @@
             return;
         }
         $.ajax({
-            url: window.API_BASE_URL + "/domain-orders?limit=5",
+            url: window.API_BASE_URL + "/orders?limit=5",
             type: "GET",
             headers: {
                 "Authorization": "Bearer " + token,
@@ -268,7 +269,7 @@
                             <td>${order.domain_name}</td>
                             <td>${order.years} Year(s)</td>
                             <td>${order.amount}</td>
-                            <td><span class="badge bg-primary">${order.status}</span></td>
+                            <td><span class="badge bg-warning">${order.status?.toUpperCase()}</span></td>
                         </tr>`;
                     });
 
@@ -281,9 +282,91 @@
             },
             error: function (xhr) {
                 console.error(xhr.responseJSON);
-                alert("Failed to load orders");
             }
         });
+    });
+    </script> --}}
+    <script>
+    $(document).ready(function () {
+        const token = localStorage.getItem("token");
+        if (!token) return;
+
+        const headers = {
+            "Authorization": "Bearer " + token,
+            "Accept": "application/json"
+        };
+
+        // --- 1️⃣ Load dashboard summary ---
+        $.ajax({
+            url: window.API_BASE_URL + "/profile/dashboard-summary",
+            type: "GET",
+            headers: headers,
+            success: function (response) {
+                if (!response.success) return;
+
+                const data = response.data;
+
+                // Update summary cards
+                $("#totalDomains").attr("data-target", data.domains.total).text(data.domains.total);
+                $("#activeDomains").attr("data-target", data.domains.active).text(data.domains.active);
+                $("#unpaidInvoices").attr("data-target", data.invoices.unpaid_count).text(data.invoices.unpaid_count);
+                $("#amountDue").text("৳" + parseFloat(data.invoices.amount_due).toFixed(2));
+
+                // You can also display customer info if needed
+                $("#customerName").text(data.user.full_name);
+            },
+            error: function (xhr) {
+                console.error("Dashboard summary error:", xhr.responseJSON);
+            }
+        });
+
+
+        // --- 2️⃣ Load domain orders table ---
+        $.ajax({
+            url: window.API_BASE_URL + "/orders?limit=5",
+            type: "GET",
+            headers: headers,
+            success: function (response) {
+                const orders = response.data.data;
+
+                if (orders && orders.length > 0) {
+                    $("#emptyState").hide();
+                    $("#domainTableWrapper").removeClass("d-none");
+
+                    let html = "";
+                    orders.forEach((order,index) => {
+                        html += `
+                            <tr>
+                                <td>${index + 1}</td>
+                                <td>${order.domain_name}</td>
+                                <td>${order.years} Year(s)</td>
+                                <td>৳${parseFloat(order.amount).toFixed(2)}</td>
+                                <td><span class="badge bg-${getStatusColor(order.status)}">${order.status?.toUpperCase()}</span></td>
+                            </tr>`;
+                    });
+
+                    $("#orderTableBody").html(html);
+                } else {
+                    $("#domainTableWrapper").addClass("d-none");
+                    $("#emptyState").show();
+                }
+            },
+            error: function (xhr) {
+                console.error("Orders error:", xhr.responseJSON);
+            }
+        });
+
+
+        // Helper: badge color by status
+        function getStatusColor(status) {
+            switch (status) {
+                case "active": return "success";
+                case "pending": return "warning";
+                case "rejected": return "danger";
+                case "cancelled": return "secondary";
+                default: return "info";
+            }
+        }
     });
     </script>
     <script>
@@ -349,7 +432,7 @@
                     const items = invoices.slice(0, 5);
 
                     let html = "";
-                    items.forEach(inv => {
+                    items.forEach((inv,index) => {
                         const domain = inv.order?.domain_name || "N/A";
                         const date = formatDate(inv.created_at || inv.updated_at);
                         const status = (inv.status || '').toLowerCase();
@@ -359,6 +442,7 @@
 
                         html += `
                             <tr>
+                                <td>${index + 1}</td>
                                 <td>${inv.invoice_no || '—'}</td>
                                 <td>৳${parseFloat(inv.amount || 0).toFixed(2)}</td>
                                 <td><span class="badge bg-${statusBadge} text-uppercase">${(inv.status || '—')}</span></td>

@@ -187,7 +187,7 @@
                         <td>${order.domain_name}</td>
                         <td>${order.years} Year(s)</td>
                         <td>${order.amount}</td>
-                        <td><span class="badge bg-primary">${order.status}</span></td>
+                        <td><span class="badge bg-warning">${order.status?.toUpperCase()}</span></td>
                     </tr>`;
                 });
 
@@ -225,7 +225,7 @@
 
         function fetchOrders(page = 1) {
             $.ajax({
-                url: window.API_BASE_URL + `/domain-orders?page=${page}`,
+                url: window.API_BASE_URL + `/orders?page=${page}`,
                 type: "GET",
                 headers: {
                     "Authorization": "Bearer " + token,
@@ -247,7 +247,7 @@
                     }
                 },
                 error: function () {
-                    alert("Failed to load orders");
+                    //
                 }
             });
         }

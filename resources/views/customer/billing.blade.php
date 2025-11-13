@@ -44,7 +44,7 @@
                                     <div class="flex-1 ms-3">
                                         <h6 class="mb-0 text-muted">Amount Due</h6>
                                         <p class="fs-5 text-danger fw-bold mb-0">
-                                            ৳<span id="amountDue">0</span>
+                                            <span id="amountDue">0</span>
                                         </p>
                                     </div>
                                 </div>
@@ -60,7 +60,7 @@
                                     <div class="flex-1 ms-3">
                                         <h6 class="mb-0 text-muted">Paid This Year</h6>
                                         <p class="fs-5 text-success fw-bold mb-0">
-                                            ৳<span id="paidThisYear">0</span>
+                                            <span id="paidThisYear">0</span>
                                         </p>
                                     </div>
                                 </div>
@@ -154,129 +154,119 @@
     <script>
         $(document).ready(function() {
             const token = localStorage.getItem("token");
-            if (!token) return; // no token → skip
-
-            function getInvoiceArray(response) {
-                // response.data may be:
-                // 1) an array (older/unusual API)
-                // 2) a pagination object { data: [...], current_page: ..., ... }
-                // 3) an object (single invoice) — handle defensively
-                const payload = response.data;
-
-                if (!payload) return [];
-
-                if (Array.isArray(payload)) {
-                    return payload;
-                }
-
-                if (payload.data && Array.isArray(payload.data)) {
-                    return payload.data;
-                }
-
-                // fallback: if payload itself looks like an invoice object, return single-item array
-                if (typeof payload === 'object') {
-                    // If it has invoice_no or id assume single invoice object
-                    if (payload.id || payload.invoice_no) return [payload];
-                }
-
-                return [];
-            }
-
-            function formatDate(isoStr) {
-                try {
-                    return new Date(isoStr).toLocaleDateString();
-                } catch (e) {
-                    return isoStr || '';
-                }
-            }
-
-            // Fetch invoices
+            if (!token) return;
+            const headers = {
+                "Authorization": "Bearer " + token,
+                "Accept": "application/json"
+            };
+            // --- 1️⃣ Load dashboard summary ---
             $.ajax({
-                url: `${window.API_BASE_URL}/my-invoices`,
+                url: window.API_BASE_URL + "/profile/dashboard-summary",
                 type: "GET",
-                headers: {
-                    "Authorization": "Bearer " + token,
-                    "Accept": "application/json"
+                headers: headers,
+                success: function (response) {
+                    if (!response.success) return;
+
+                    const invoices = response.data.invoices;
+
+                    
+                    $("#totalInvoices").text(invoices.total_count);
+                    $("#amountDue").text("৳" + parseFloat(invoices.amount_due).toFixed(2));
+                    $("#paidThisYear").text("৳" + parseFloat(invoices.paid_this_year).toFixed(2));
+                    $("#pendingInvoices").text(invoices.unpaid_count);
                 },
-                success: function(response) {
-                    // Extract invoice data safely (handle paginated or plain array)
-                    const invoices = Array.isArray(response.data)
-                        ? response.data
-                        : response.data?.data || [];
+                error: function (xhr) {
+                    console.error("Dashboard summary error:", xhr.responseJSON);
+                }
+            });
 
-                    // --------------------------
-                    // NEW: update summary cards
-                    // --------------------------
-                    const currentYear = new Date().getFullYear();
-                    let totalInvoices = invoices.length;
-                    let amountDue = 0;
-                    let paidThisYear = 0;
-                    let pendingInvoices = 0;
+            let currentSearch = "";
+            let currentStatus = "all";
 
-                    invoices.forEach(inv => {
-                        const amount = parseFloat(inv.amount || 0);
-                        const status = (inv.status || "").toLowerCase();
-                        const year = new Date(inv.created_at).getFullYear();
+            function fetchInvoices() {
+                let url = `${window.API_BASE_URL}/my-invoices?`;
 
-                        if (status === "unpaid") {
-                            amountDue += amount;
-                            pendingInvoices++;
-                        } else if (status === "paid" && year === currentYear) {
-                            paidThisYear += amount;
+                if (currentSearch.trim()) {
+                    url += `search=${encodeURIComponent(currentSearch.trim())}&`;
+                }
+
+                if (currentStatus && currentStatus !== "all") {
+                    url += `status=${encodeURIComponent(currentStatus)}&`;
+                }
+
+                $.ajax({
+                    url,
+                    type: "GET",
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        "Accept": "application/json"
+                    },
+                    beforeSend: function() {
+                        $("#invoiceTableBody").html("<tr><td colspan='6' class='text-center py-4'>Loading...</td></tr>");
+                    },
+                    success: function(response) {
+                        const invoices = response.data?.data || [];
+
+                        $(".totalInvoices").text(response.data?.total || 0);
+
+                        if (invoices.length === 0) {
+                            $("#invoiceTableWrapper").addClass("d-none");
+                            $("#noInvoices").removeClass("d-none");
+                            return;
                         }
-                    });
 
-                    $("#totalInvoices").text(totalInvoices);
-                    $(".totalInvoices").text(totalInvoices);
-                    $("#amountDue").text(amountDue.toLocaleString());
-                    $("#paidThisYear").text(paidThisYear.toLocaleString());
-                    $("#pendingInvoices").text(pendingInvoices);
+                        $("#noInvoices").addClass("d-none");
+                        $("#invoiceTableWrapper").removeClass("d-none");
 
-                    // --------------------------
-                    // Existing table rendering logic
-                    // --------------------------
-                    if (invoices.length === 0) {
+                        let html = "";
+                        invoices.forEach(inv => {
+                            const domain = inv.order?.domain_name || "N/A";
+                            const date = new Date(inv.created_at).toLocaleDateString();
+                            const statusBadge =
+                                inv.status === "paid"
+                                    ? "success"
+                                    : inv.status === "unpaid"
+                                    ? "warning"
+                                    : "secondary";
+
+                            html += `
+                                <tr>
+                                    <td>${inv.invoice_no}</td>
+                                    <td>${domain}</td>
+                                    <td>৳${parseFloat(inv.amount).toFixed(2)}</td>
+                                    <td><span class="badge bg-${statusBadge} text-uppercase">${inv.status}</span></td>
+                                    <td>${date}</td>
+                                    <td align="center">
+                                        <button class="btn btn-sm btn-outline-primary download-invoice-btn" data-id="${inv.id}">
+                                            <i class="uil uil-download-alt"></i> PDF
+                                        </button>
+                                    </td>
+                                </tr>`;
+                        });
+
+                        $("#invoiceTableBody").html(html);
+                    },
+                    error: function(xhr) {
+                        console.error("Failed to load invoices:", xhr.responseText || xhr.responseJSON);
                         $("#invoiceTableWrapper").addClass("d-none");
                         $("#noInvoices").removeClass("d-none");
-                        return;
                     }
+                });
+            }
 
-                    $("#noInvoices").addClass("d-none");
-                    $("#invoiceTableWrapper").removeClass("d-none");
+            // Initial load
+            fetchInvoices();
 
-                    let html = "";
-                    invoices.slice(0, 5).forEach(inv => {
-                        const domain = inv.order?.domain_name || "N/A";
-                        const date = new Date(inv.created_at).toLocaleDateString();
-                        const statusBadge =
-                            inv.status === "paid"
-                                ? "success"
-                                : inv.status === "unpaid"
-                                ? "warning"
-                                : "secondary";
+            // On search input
+            $(".form-control-lg").on("input", function() {
+                currentSearch = $(this).val();
+                fetchInvoices();
+            });
 
-                        html += `
-                            <tr>
-                                <td>${inv.invoice_no}</td>
-                                <td>${domain}</td>
-                                <td>৳${parseFloat(inv.amount).toFixed(2)}</td>
-                                <td><span class="badge bg-${statusBadge} text-uppercase">${inv.status}</span></td>
-                                <td>${date}</td>
-                                <td align="center">
-                                    <button class="btn btn-sm btn-outline-primary download-invoice-btn" data-id="${inv.id}">
-                                        <i class="uil uil-download-alt"></i> PDF
-                                    </button>
-                                </td>
-                            </tr>`;
-                    });
-
-                    $("#invoiceTableBody").html(html);
-                },
-                error: function(xhr) {
-                    console.error("Failed to load invoices:", xhr.responseText || xhr.responseJSON);
-                    $("#invoiceTableWrapper").addClass("d-none");
-                    $("#noInvoices").removeClass("d-none");
-                }
+            // On status change
+            $(".form-select").on("change", function() {
+                currentStatus = $(this).val().toLowerCase();
+                fetchInvoices();
             });
 
             // Delegate click to handle download via AJAX (so we can send Authorization header)

@@ -844,7 +844,7 @@
             }
             function placeDomainOrder(domainPayload, token = null) {
                 $.ajax({
-                    url:  window.API_BASE_URL + "/domain-orders",
+                    url:  window.API_BASE_URL + "/orders",
                     type: "POST",
                     data: domainPayload,
                     processData: false,
